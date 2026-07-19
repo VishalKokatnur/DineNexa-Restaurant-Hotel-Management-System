@@ -156,7 +156,7 @@ function ReservationPage() {
         <table className="premium-table">
           <thead>
             <tr>
-              <th>ID</th>
+              
               <th>Customer</th>
               <th>Phone</th>
               <th>Date</th>
@@ -171,20 +171,30 @@ function ReservationPage() {
           <tbody>
             {reservations.map((r) => (
               <tr key={r.id}>
-                <td>#{r.id}</td>
                 <td className="item-name">👤 {r.customer_name}</td>
+
                 <td>{r.phone}</td>
+
                 <td>{r.reservation_date}</td>
+
                 <td>{r.reservation_time}</td>
+
                 <td>{r.guests}</td>
+
                 <td>Table {r.table_number}</td>
+
                 <td>
                   <span className="category-badge">{r.status}</span>
                 </td>
+
                 <td>
-                  <button className="edit-btn" onClick={() => handleEdit(r)}>
+                  <button
+                    className="edit-btn"
+                    onClick={() => handleEdit(r)}
+                  >
                     Edit
                   </button>
+
                   <button
                     className="delete-btn"
                     onClick={() => handleDelete(r.id)}

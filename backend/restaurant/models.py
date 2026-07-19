@@ -9,13 +9,15 @@ class MenuItem(models.Model):
 
     def __str__(self):
         return self.name
-    
+
+
 class RestaurantTable(models.Model):
     TABLE_STATUS = [
-        ('Available', 'Available'),
-        ('Reserved', 'Reserved'),
-        ('Occupied', 'Occupied'),
-        ('Cleaning', 'Cleaning'),
+        ("Available", "Available"),
+        ("Reserved", "Reserved"),
+        ("Occupied", "Occupied"),
+        ("Billing", "Billing"),
+        ("Cleaning", "Cleaning"),
     ]
 
     table_number = models.CharField(max_length=20, unique=True)
@@ -23,19 +25,21 @@ class RestaurantTable(models.Model):
     status = models.CharField(
         max_length=20,
         choices=TABLE_STATUS,
-        default='Available'
+        default="Available"
     )
 
     def __str__(self):
         return f"Table {self.table_number} - {self.status}"
-    
+
+
 class Order(models.Model):
     ORDER_STATUS = [
-        ('Pending', 'Pending'),
-        ('Preparing', 'Preparing'),
-        ('Ready', 'Ready'),
-        ('Served', 'Served'),
-        ('Cancelled', 'Cancelled'),
+        ("Pending", "Pending"),
+        ("Preparing", "Preparing"),
+        ("Ready", "Ready"),
+        ("Served", "Served"),
+        ("Billed", "Billed"),
+        ("Cancelled", "Cancelled"),
     ]
 
     table = models.ForeignKey(
@@ -48,21 +52,21 @@ class Order(models.Model):
     status = models.CharField(
         max_length=20,
         choices=ORDER_STATUS,
-        default='Pending'
+        default="Pending"
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Order #{self.id} - Table {self.table.table_number}"
-    
+
 
 class KitchenOrder(models.Model):
     KITCHEN_STATUS = [
-        ('Pending', 'Pending'),
-        ('Preparing', 'Preparing'),
-        ('Ready', 'Ready'),
-        ('Served', 'Served'),
+        ("Pending", "Pending"),
+        ("Preparing", "Preparing"),
+        ("Ready", "Ready"),
+        ("Served", "Served"),
     ]
 
     order = models.OneToOneField(
@@ -75,7 +79,7 @@ class KitchenOrder(models.Model):
     status = models.CharField(
         max_length=20,
         choices=KITCHEN_STATUS,
-        default='Pending'
+        default="Pending"
     )
 
     preparation_time = models.IntegerField(
@@ -88,25 +92,37 @@ class KitchenOrder(models.Model):
 
     def __str__(self):
         return f"KOT for Order #{self.order.id} - {self.status}"
-    
+
 
 class Bill(models.Model):
     PAYMENT_METHOD = [
-        ('Cash', 'Cash'),
-        ('UPI', 'UPI'),
-        ('Card', 'Card'),
-        ('Online', 'Online'),
+        ("Cash", "Cash"),
+        ("UPI", "UPI"),
+        ("Card", "Card"),
+        ("Online", "Online"),
     ]
 
     PAYMENT_STATUS = [
-        ('Pending', 'Pending'),
-        ('Paid', 'Paid'),
-        ('Cancelled', 'Cancelled'),
+        ("Pending", "Pending"),
+        ("Paid", "Paid"),
+        ("Cancelled", "Cancelled"),
     ]
 
     order = models.OneToOneField(
         Order,
         on_delete=models.CASCADE
+    )
+
+    customer_name = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+
+    phone = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True
     )
 
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -117,20 +133,20 @@ class Bill(models.Model):
     payment_method = models.CharField(
         max_length=20,
         choices=PAYMENT_METHOD,
-        default='Cash'
+        default="Cash"
     )
 
     payment_status = models.CharField(
         max_length=20,
         choices=PAYMENT_STATUS,
-        default='Pending'
+        default="Pending"
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Bill #{self.id} - {self.payment_status}"
-    
+
 
 class Customer(models.Model):
     name = models.CharField(max_length=100)

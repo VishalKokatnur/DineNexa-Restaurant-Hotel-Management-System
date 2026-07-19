@@ -6,18 +6,18 @@ from .views import (
     OrderViewSet,
     KitchenOrderViewSet,
     BillViewSet,
-    CustomerViewSet
+    CustomerViewSet,
 )
 
 router = DefaultRouter()
 
-router.register('menu-items', MenuItemViewSet)
-router.register('tables', RestaurantTableViewSet)
-router.register('orders', OrderViewSet)
-router.register('kitchen-orders', KitchenOrderViewSet)
-router.register('bills', BillViewSet)
-router.register('customers', CustomerViewSet)
+router.register("menu-items", MenuItemViewSet, basename="menu-items")
+router.register("tables", RestaurantTableViewSet, basename="tables")
+router.register("orders", OrderViewSet, basename="orders")
+router.register("kitchen-orders", KitchenOrderViewSet, basename="kitchen-orders")
+router.register("bills", BillViewSet, basename="bills")
+router.register("customers", CustomerViewSet, basename="customers")
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path("", include(router.urls)),
 ]

@@ -122,7 +122,7 @@ function CustomersPage() {
         <table className="premium-table">
           <thead>
             <tr>
-              <th>ID</th>
+              
               <th>Name</th>
               <th>Phone</th>
               <th>Email</th>
@@ -134,16 +134,32 @@ function CustomersPage() {
           <tbody>
             {filteredCustomers.map((c) => (
               <tr key={c.id}>
-                <td>#{c.id}</td>
                 <td className="item-name">👤 {c.name}</td>
+
                 <td>{c.phone}</td>
+
                 <td>{c.email || "-"}</td>
+
                 <td>
-                  <span className="category-badge">{c.loyalty_points} pts</span>
+                  <span className="category-badge">
+                    {c.loyalty_points} pts
+                  </span>
                 </td>
+
                 <td>
-                  <button className="edit-btn" onClick={() => handleEdit(c)}>Edit</button>
-                  <button className="delete-btn" onClick={() => handleDelete(c.id)}>Delete</button>
+                  <button
+                    className="edit-btn"
+                    onClick={() => handleEdit(c)}
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDelete(c.id)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}

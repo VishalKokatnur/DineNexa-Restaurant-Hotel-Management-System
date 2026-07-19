@@ -1,0 +1,178 @@
+/* =====================================================
+   SmartDine Pro - Dark Premium Low Stock Page
+===================================================== */
+
+.low-stock-page,
+.low-stock-page-box {
+  max-width: 1480px;
+  margin: 0 auto 50px;
+  padding: 28px;
+  border-radius: 30px;
+  background: rgba(17, 19, 15, 0.92);
+  border: 1px solid rgba(224, 182, 79, 0.18);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
+  color: #ded8c9;
+}
+
+.low-stock-header,
+.low-stock-page .page-header {
+  background:
+    linear-gradient(135deg, rgba(8, 9, 7, 0.96), rgba(17, 19, 15, 0.94)),
+    url("https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=1600&q=80");
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(224, 182, 79, 0.22);
+  border-radius: 24px;
+  padding: 30px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.low-stock-header h1,
+.low-stock-page .page-header h1 {
+  color: #ffffff !important;
+  margin: 0 0 8px;
+  font-size: 34px;
+  font-weight: 950;
+}
+
+.low-stock-header p,
+.low-stock-page .page-header p {
+  color: #928b7a !important;
+  margin: 0;
+  font-weight: 700;
+}
+
+.low-stock-summary-grid,
+.low-stock-cards,
+.stock-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin: 24px 0;
+}
+
+.low-stock-card,
+.stock-card,
+.summary-card {
+  background: #11130f !important;
+  border: 1px solid rgba(224, 182, 79, 0.18) !important;
+  border-radius: 22px !important;
+  padding: 26px !important;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18) !important;
+}
+
+.low-stock-card h2,
+.stock-card h2,
+.summary-card h2 {
+  color: #e0b64f !important;
+  font-size: 32px;
+  margin: 0 0 8px;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.low-stock-card p,
+.stock-card p,
+.summary-card p {
+  color: #928b7a !important;
+  font-weight: 850;
+  margin: 0;
+}
+
+.low-stock-section,
+.stock-alert-section,
+.low-stock-table-box {
+  background: #11130f;
+  border: 1px solid rgba(224, 182, 79, 0.18);
+  border-radius: 24px;
+  padding: 26px;
+  margin-top: 24px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+  overflow-x: auto;
+}
+
+.low-stock-section h2,
+.stock-alert-section h2,
+.low-stock-table-box h2 {
+  color: #ffffff;
+  margin: 0 0 20px;
+  font-size: 26px;
+}
+
+.low-stock-page table,
+.low-stock-page-box table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.low-stock-page th,
+.low-stock-page-box th {
+  background: #080907 !important;
+  color: #e0b64f !important;
+  padding: 15px !important;
+  text-align: left !important;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.low-stock-page td,
+.low-stock-page-box td {
+  color: #ded8c9 !important;
+  padding: 15px !important;
+  border-bottom: 1px solid rgba(224, 182, 79, 0.12) !important;
+  background: transparent !important;
+  font-weight: 650;
+}
+
+.low-stock-page tr:hover td,
+.low-stock-page-box tr:hover td {
+  background: rgba(201, 149, 37, 0.08) !important;
+}
+
+.low-stock-badge,
+.stock-status,
+.status-low,
+.low-stock-page .category-badge {
+  background: rgba(201, 149, 37, 0.16) !important;
+  color: #e0b64f !important;
+  border: 1px solid rgba(224, 182, 79, 0.25);
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-weight: 950;
+}
+
+.low-stock-page button,
+.low-stock-page-box button {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #0b4a3f, #06352e);
+  color: #ffffff;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.low-stock-page button:hover,
+.low-stock-page-box button:hover {
+  background: linear-gradient(135deg, #c99525, #9a6b12);
+}
+
+@media (max-width: 900px) {
+  .low-stock-summary-grid,
+  .low-stock-cards,
+  .stock-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .low-stock-header,
+  .low-stock-page .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+

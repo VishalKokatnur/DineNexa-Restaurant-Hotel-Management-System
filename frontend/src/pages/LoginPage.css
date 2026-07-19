@@ -1,4 +1,4 @@
-* {
+/* * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -53,4 +53,707 @@
 
 .login-card button:hover {
   background: #2a5298;
+} */
+
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@500;600;700&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+/* =====================================================
+   SmartDine Pro Login - Simple Premium Drag Landing
+   No background image
+===================================================== */
+
+.smartdine-drag-page {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  cursor: grab;
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(201, 149, 37, 0.16), transparent 28%),
+    radial-gradient(circle at 88% 4%, rgba(13, 78, 66, 0.34), transparent 32%),
+    linear-gradient(135deg, #050605 0%, #080907 42%, #0e110d 100%);
+  scroll-behavior: smooth;
+  position: relative;
+}
+
+.smartdine-drag-page.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.smartdine-drag-page::-webkit-scrollbar {
+  width: 10px;
+}
+
+.smartdine-drag-page::-webkit-scrollbar-track {
+  background: #050605;
+}
+
+.smartdine-drag-page::-webkit-scrollbar-thumb {
+  background: #c99525;
+  border-radius: 20px;
+}
+
+/* Simple premium grid background */
+.smartdine-drag-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(215, 180, 106, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(215, 180, 106, 0.055) 1px, transparent 1px);
+  background-size: 76px 76px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.smartdine-drag-page::after {
+  content: "";
+  position: fixed;
+  width: 560px;
+  height: 560px;
+  right: -140px;
+  top: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201, 149, 37, 0.18), transparent 68%);
+  filter: blur(12px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.smartdine-landing-nav,
+.smartdine-landing-main {
+  position: relative;
+  z-index: 2;
+}
+
+/* =====================================================
+   Top Navbar
+===================================================== */
+
+.smartdine-landing-nav {
+  max-width: 1420px;
+  margin: 0 auto;
+  padding: 28px 36px;
+  min-height: 96px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.smartdine-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.smartdine-nav-brand span {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #d7b46a, #936719);
+  color: #080907;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 950;
+  box-shadow: 0 16px 34px rgba(201, 149, 37, 0.28);
+}
+
+.smartdine-nav-brand h2 {
+  margin: 0;
+  font-family: "Cinzel", serif;
+  font-size: 25px;
+  color: #ffffff;
+}
+
+.smartdine-nav-brand p {
+  margin: 4px 0 0;
+  color: #d7b46a;
+  font-size: 11px;
+  font-weight: 950;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.smartdine-landing-nav nav {
+  display: flex;
+  gap: 12px;
+}
+
+.smartdine-landing-nav nav button,
+.smartdine-nav-login-btn {
+  border: 1px solid rgba(215, 180, 106, 0.24);
+  border-radius: 999px;
+  padding: 10px 18px;
+  background: rgba(255, 255, 255, 0.055);
+  color: #ffffff;
+  font-weight: 850;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.smartdine-landing-nav nav button:hover {
+  background: rgba(215, 180, 106, 0.12);
+  color: #d7b46a;
+}
+
+.smartdine-nav-login-btn {
+  background: linear-gradient(135deg, #d7b46a, #936719);
+  color: #080907;
+  font-weight: 950;
+}
+
+/* =====================================================
+   Main Hero
+===================================================== */
+
+.smartdine-landing-main {
+  max-width: 1420px;
+  margin: 0 auto;
+  padding: 20px 36px 0;
+}
+
+.smartdine-hero-section {
+  min-height: calc(100vh - 130px);
+  display: grid;
+  grid-template-columns: 1.25fr 430px;
+  gap: 70px;
+  align-items: center;
+  padding: 50px 0 80px;
+}
+
+.smartdine-mini-pill {
+  display: inline-block;
+  color: #d7b46a;
+  border: 1px solid rgba(215, 180, 106, 0.35);
+  background: rgba(201, 149, 37, 0.08);
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 950;
+  margin-bottom: 24px;
+}
+
+.smartdine-hero-content h1 {
+  margin: 0;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 76px;
+  line-height: 1.04;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: #ffffff;
+  text-shadow: 0 18px 44px rgba(0, 0, 0, 0.45);
+}
+
+.smartdine-hero-content p {
+  max-width: 720px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 18px;
+  line-height: 1.85;
+  margin: 28px 0 34px;
+  font-weight: 600;
+}
+
+.smartdine-hero-actions {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 38px;
+}
+
+.smartdine-hero-actions button,
+.smartdine-final-cta button {
+  border: none;
+  border-radius: 999px;
+  padding: 15px 28px;
+  background: linear-gradient(135deg, #d7b46a, #936719);
+  color: #080907;
+  font-weight: 950;
+  cursor: pointer;
+  box-shadow: 0 18px 38px rgba(201, 149, 37, 0.3);
+  transition: 0.25s ease;
+}
+
+.smartdine-hero-actions button:hover,
+.smartdine-final-cta button:hover {
+  transform: translateY(-3px);
+}
+
+.smartdine-hero-actions button.outline {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  border: 1px solid rgba(215, 180, 106, 0.3);
+}
+
+.smartdine-hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 780px;
+  border-top: 1px solid rgba(215, 180, 106, 0.22);
+  border-bottom: 1px solid rgba(215, 180, 106, 0.22);
+}
+
+.smartdine-hero-stats div {
+  padding: 22px;
+  border-right: 1px solid rgba(215, 180, 106, 0.16);
+}
+
+.smartdine-hero-stats div:last-child {
+  border-right: none;
+}
+
+.smartdine-hero-stats strong {
+  display: block;
+  color: #d7b46a;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 28px;
+  font-weight: 950;
+}
+
+.smartdine-hero-stats span {
+  display: block;
+  color: rgba(255, 255, 255, 0.55);
+  margin-top: 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 900;
+}
+
+/* =====================================================
+   Login Card
+===================================================== */
+
+.smartdine-login-card {
+  background:
+    linear-gradient(145deg, rgba(17, 19, 15, 0.96), rgba(8, 9, 7, 0.98));
+  border: 1px solid rgba(215, 180, 106, 0.28);
+  border-radius: 30px;
+  padding: 36px;
+  box-shadow: 0 34px 90px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(18px);
+  position: sticky;
+  top: 34px;
+  overflow: hidden;
+}
+
+.smartdine-login-card::before {
+  content: "";
+  position: absolute;
+  inset: 18px;
+  border: 1px solid rgba(215, 180, 106, 0.13);
+  border-radius: 24px;
+  pointer-events: none;
+}
+
+.smartdine-card-top {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 26px;
+}
+
+.smartdine-card-top span {
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #d7b46a, #936719);
+  color: #080907;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 950;
+}
+
+.smartdine-card-top h2 {
+  margin: 0 0 4px;
+  color: #ffffff;
+  font-family: "Cinzel", serif;
+  font-size: 30px;
+}
+
+.smartdine-card-top p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.smartdine-login-card form {
+  position: relative;
+  z-index: 2;
+}
+
+.smartdine-field {
+  margin-bottom: 18px;
+}
+
+.smartdine-field label {
+  display: block;
+  color: #d7b46a;
+  font-size: 13px;
+  font-weight: 950;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 9px;
+}
+
+.smartdine-field input {
+  width: 100%;
+  height: 54px;
+  border-radius: 16px;
+  border: 1px solid rgba(215, 180, 106, 0.24);
+  background: #0c0e0b;
+  color: #ffffff;
+  padding: 0 16px;
+  outline: none;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.smartdine-field input::placeholder {
+  color: rgba(255, 255, 255, 0.34);
+}
+
+.smartdine-field input:focus {
+  border-color: #d7b46a;
+  box-shadow: 0 0 0 4px rgba(215, 180, 106, 0.12);
+}
+
+.smartdine-password-row {
+  display: flex;
+  gap: 10px;
+}
+
+.smartdine-password-row input {
+  flex: 1;
+}
+
+.smartdine-password-row button {
+  min-width: 74px;
+  border: none;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #d7b46a;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.smartdine-login-submit {
+  width: 100%;
+  height: 56px;
+  border: none;
+  border-radius: 16px;
+  margin-top: 6px;
+  background: linear-gradient(135deg, #d7b46a, #936719);
+  color: #080907;
+  font-weight: 950;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.smartdine-login-submit:hover {
+  transform: translateY(-2px);
+}
+
+.smartdine-login-submit:disabled {
+  background: #6b7280;
+  color: #ffffff;
+  cursor: not-allowed;
+}
+
+.smartdine-role-box {
+  position: relative;
+  z-index: 2;
+  margin-top: 22px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(201, 149, 37, 0.09);
+  border: 1px dashed rgba(215, 180, 106, 0.25);
+}
+
+.smartdine-role-box span {
+  display: block;
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.smartdine-role-box strong {
+  display: block;
+  margin-top: 6px;
+  color: #d7b46a;
+  font-size: 13px;
+}
+
+/* =====================================================
+   Gold Strip
+===================================================== */
+
+.smartdine-marquee {
+  margin: 0 -36px;
+  min-height: 62px;
+  background: #d7b46a;
+  color: #080907;
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 0 42px;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 950;
+}
+
+.smartdine-marquee span::after {
+  content: "◆";
+  margin-left: 50px;
+  font-size: 10px;
+}
+
+/* =====================================================
+   Sections
+===================================================== */
+
+.smartdine-section,
+.smartdine-menu-section,
+.smartdine-pricing-section,
+.smartdine-final-cta {
+  padding: 90px 0;
+}
+
+.smartdine-section-title {
+  text-align: center;
+  max-width: 820px;
+  margin: 0 auto 44px;
+}
+
+.smartdine-section-title span {
+  color: #d7b46a;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.smartdine-section-title h2,
+.smartdine-menu-section h2,
+.smartdine-final-cta h2 {
+  color: #ffffff;
+  font-family: "Cinzel", serif;
+  font-size: 48px;
+  line-height: 1.15;
+  margin: 14px 0 0;
+}
+
+.smartdine-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.smartdine-feature-card {
+  background: rgba(17, 19, 15, 0.84);
+  border: 1px solid rgba(215, 180, 106, 0.18);
+  border-radius: 22px;
+  padding: 28px;
+}
+
+.smartdine-feature-card span {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: rgba(215, 180, 106, 0.16);
+  color: #d7b46a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 950;
+  margin-bottom: 18px;
+}
+
+.smartdine-feature-card h3 {
+  margin: 0 0 12px;
+  color: #ffffff;
+  font-size: 20px;
+}
+
+.smartdine-feature-card p {
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.smartdine-menu-section {
+  display: grid;
+  grid-template-columns: 1fr 430px;
+  gap: 60px;
+  align-items: center;
+}
+
+.smartdine-menu-section p {
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+.smartdine-menu-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 26px 0 0;
+}
+
+.smartdine-menu-section li {
+  padding: 12px 0;
+  color: #d7b46a;
+  border-bottom: 1px solid rgba(215, 180, 106, 0.14);
+  font-weight: 850;
+}
+
+.smartdine-flow-card {
+  background: rgba(17, 19, 15, 0.9);
+  border: 1px solid rgba(215, 180, 106, 0.2);
+  border-radius: 28px;
+  padding: 30px;
+}
+
+.smartdine-flow-card div {
+  display: flex;
+  justify-content: space-between;
+  padding: 18px 0;
+  border-bottom: 1px dashed rgba(215, 180, 106, 0.18);
+}
+
+.smartdine-flow-card div:last-child {
+  border-bottom: none;
+}
+
+.smartdine-flow-card span {
+  color: #d7b46a;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.smartdine-flow-card strong {
+  color: #ffffff;
+}
+
+.smartdine-module-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.smartdine-module-grid div {
+  min-height: 210px;
+  padding: 32px;
+  border-radius: 24px;
+  background: rgba(17, 19, 15, 0.86);
+  border: 1px solid rgba(215, 180, 106, 0.2);
+}
+
+.smartdine-module-grid h3 {
+  color: #d7b46a;
+  font-size: 28px;
+  margin: 0 0 16px;
+  font-family: "Cinzel", serif;
+}
+
+.smartdine-module-grid p {
+  color: rgba(255, 255, 255, 0.62);
+  line-height: 1.7;
+}
+
+.smartdine-final-cta {
+  text-align: center;
+  background: #d7b46a;
+  color: #080907;
+  margin: 50px -36px 0;
+}
+
+.smartdine-final-cta h2 {
+  color: #080907;
+  margin-bottom: 24px;
+}
+
+.smartdine-final-cta button {
+  background: #080907;
+  color: #ffffff;
+}
+
+/* =====================================================
+   Responsive
+===================================================== */
+
+@media (max-width: 1100px) {
+  .smartdine-landing-nav nav {
+    display: none;
+  }
+
+  .smartdine-hero-section,
+  .smartdine-menu-section {
+    grid-template-columns: 1fr;
+  }
+
+  .smartdine-login-card {
+    position: relative;
+    top: auto;
+  }
+
+  .smartdine-feature-grid,
+  .smartdine-module-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .smartdine-hero-content h1 {
+    font-size: 58px;
+  }
+}
+
+@media (max-width: 700px) {
+  .smartdine-landing-nav {
+    padding: 20px;
+  }
+
+  .smartdine-landing-main {
+    padding: 14px 20px 0;
+  }
+
+  .smartdine-hero-content h1 {
+    font-size: 40px;
+  }
+
+  .smartdine-hero-stats,
+  .smartdine-feature-grid,
+  .smartdine-module-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .smartdine-hero-actions,
+  .smartdine-password-row {
+    flex-direction: column;
+  }
+
+  .smartdine-login-card {
+    padding: 26px;
+  }
+
+  .smartdine-section-title h2,
+  .smartdine-menu-section h2,
+  .smartdine-final-cta h2 {
+    font-size: 34px;
+  }
 }

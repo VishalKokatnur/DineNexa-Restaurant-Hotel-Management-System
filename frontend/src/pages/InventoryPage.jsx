@@ -51,7 +51,7 @@ function InventoryPage() {
         <table className="premium-table">
           <thead>
             <tr>
-              <th>ID</th>
+              
               <th>Item</th>
               <th>Category</th>
               <th>Current Stock</th>
@@ -69,9 +69,7 @@ function InventoryPage() {
 
               return (
                 <tr key={item.id}>
-                  <td>#{item.id}</td>
-                  <td className="item-name">📦 {item.name}</td>
-                  <td>
+                  <td className="item-name">📦 {item.name}</td>                  <td>
                     <span className="category-badge">{item.category}</span>
                   </td>
                   <td>

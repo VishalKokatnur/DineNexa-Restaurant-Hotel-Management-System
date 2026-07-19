@@ -1,0 +1,176 @@
+
+.billing-page-box {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.billing-form {
+  background: #fffaf0;
+  border: 1px solid #e7c98d;
+  border-radius: 18px;
+  padding: 24px;
+  margin: 30px 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  align-items: end;
+}
+
+.billing-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.billing-field label {
+  font-weight: 800;
+  color: #374151;
+  font-size: 14px;
+}
+
+.billing-field input,
+.billing-field select {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid #d6b56d;
+  border-radius: 12px;
+  font-size: 15px;
+  outline: none;
+  background: white;
+  color: #111827;
+}
+
+.refresh-billing-btn {
+  height: 48px;
+  border: none;
+  border-radius: 12px;
+  background: #111827;
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.billing-warning-box {
+  margin: 18px 0;
+  padding: 14px 18px;
+  border: 1px solid #facc15;
+  background: #fffbeb;
+  color: #92400e;
+  border-radius: 10px;
+  font-weight: 800;
+}
+
+.billing-success-box {
+  margin: 18px 0;
+  padding: 14px 18px;
+  border: 1px solid #22c55e;
+  background: #dcfce7;
+  color: #166534;
+  border-radius: 10px;
+  font-weight: 800;
+}
+
+.invoice-box {
+  max-width: 850px;
+  margin: 30px auto;
+  background: white;
+  padding: 35px;
+  border-radius: 18px;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.08);
+}
+
+.invoice-header {
+  text-align: center;
+  border-bottom: 1px dashed #0f766e;
+  margin-bottom: 25px;
+  padding-bottom: 18px;
+}
+
+.invoice-header h1 {
+  color: #00796b;
+  margin: 0;
+  font-size: 34px;
+}
+
+.invoice-header h2 {
+  color: #b7791f;
+  margin-top: 20px;
+}
+
+.invoice-details {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 25px;
+}
+
+.billing-invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.billing-invoice-table th {
+  background: #111827;
+  color: white;
+  padding: 14px;
+  text-align: left;
+}
+
+.billing-invoice-table td {
+  padding: 13px 14px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.bill-total-box {
+  width: 320px;
+  margin-left: auto;
+  margin-top: 25px;
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: right;
+}
+
+.bill-total-box h2 {
+  color: #00796b;
+}
+
+.invoice-footer {
+  text-align: center;
+  margin-top: 35px;
+  border-top: 1px dashed #999;
+  padding-top: 18px;
+}
+
+.bill-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.save-bill-btn,
+.print-bill-btn {
+  border: none;
+  padding: 13px 24px;
+  border-radius: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.save-bill-btn {
+  background: #00796b;
+  color: white;
+}
+
+.save-bill-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.print-bill-btn {
+  background: #111827;
+  color: white;
+}

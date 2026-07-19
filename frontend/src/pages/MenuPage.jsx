@@ -152,7 +152,7 @@ function MenuPage() {
         <table className="premium-table">
           <thead>
             <tr>
-              <th>ID</th>
+              
               <th>Item Name</th>
               <th>Category</th>
               <th>Price</th>
@@ -164,24 +164,41 @@ function MenuPage() {
           <tbody>
             {filteredItems.map((item) => (
               <tr key={item.id}>
-                <td>#{item.id}</td>
                 <td className="item-name">🍽️ {item.name}</td>
+
                 <td>
-                  <span className="category-badge">{item.category}</span>
+                  <span className="category-badge">
+                    {item.category}
+                  </span>
                 </td>
-                <td className="price">₹{item.price}</td>
+
+                <td className="price">
+                  ₹{item.price}
+                </td>
+
                 <td>
                   {item.available ? (
-                    <span className="available">Available</span>
+                    <span className="available">
+                      Available
+                    </span>
                   ) : (
-                    <span className="not-available">Not Available</span>
+                    <span className="not-available">
+                      Not Available
+                    </span>
                   )}
                 </td>
+
                 <td>
-                  <button className="edit-btn" onClick={() => handleEdit(item)}>
+                  <button
+                    type="button"
+                    className="edit-btn"
+                    onClick={() => handleEdit(item)}
+                  >
                     Edit
                   </button>
+
                   <button
+                    type="button"
                     className="delete-btn"
                     onClick={() => handleDelete(item.id)}
                   >
@@ -191,7 +208,7 @@ function MenuPage() {
               </tr>
             ))}
           </tbody>
-        </table>
+      </table>
       </div>
     </RestaurantLayout>
   );

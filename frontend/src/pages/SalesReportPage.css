@@ -1,0 +1,292 @@
+/* =====================================================
+   SmartDine Pro - Dark Premium Sales Report Page
+===================================================== */
+
+.sales-report-page {
+  max-width: 1480px;
+  margin: 0 auto 50px;
+  padding: 28px;
+  border-radius: 30px;
+  background: rgba(17, 19, 15, 0.92);
+  border: 1px solid rgba(224, 182, 79, 0.18);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
+  color: #ded8c9;
+}
+
+.sales-header {
+  background:
+    linear-gradient(135deg, rgba(8, 9, 7, 0.96), rgba(17, 19, 15, 0.94)),
+    url("https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1600&q=80");
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(224, 182, 79, 0.22);
+  border-radius: 24px;
+  padding: 30px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sales-header h1 {
+  margin: 0 0 8px;
+  color: #ffffff;
+  font-size: 34px;
+  font-weight: 950;
+}
+
+.sales-header p {
+  margin: 0;
+  color: #928b7a;
+  font-weight: 700;
+}
+
+.print-report-btn,
+.apply-btn,
+.reset-btn {
+  border: none;
+  border-radius: 14px;
+  padding: 13px 20px;
+  font-weight: 950;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.print-report-btn,
+.apply-btn {
+  background: linear-gradient(135deg, #c99525, #9a6b12);
+  color: #ffffff;
+  box-shadow: 0 14px 30px rgba(201, 149, 37, 0.3);
+}
+
+.reset-btn {
+  background: #b42318;
+  color: #ffffff;
+}
+
+.print-report-btn:hover,
+.apply-btn:hover,
+.reset-btn:hover {
+  transform: translateY(-3px);
+}
+
+.filter-section {
+  background: #11130f;
+  border: 1px solid rgba(224, 182, 79, 0.18);
+  border-radius: 22px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) auto auto;
+  gap: 14px;
+  align-items: end;
+  margin-bottom: 24px;
+}
+
+.filter-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-box label {
+  color: #e0b64f;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.filter-box input,
+.filter-box select {
+  height: 48px;
+  border: 1px solid rgba(224, 182, 79, 0.22);
+  border-radius: 13px;
+  padding: 0 14px;
+  background: #fffdf8;
+  color: #20251f;
+  outline: none;
+}
+
+.filter-box input:focus,
+.filter-box select:focus {
+  border-color: #c99525;
+  box-shadow: 0 0 0 4px rgba(201, 149, 37, 0.12);
+}
+
+.print-title {
+  text-align: center;
+  margin: 25px 0;
+}
+
+.print-title h2 {
+  color: #ffffff;
+  font-size: 28px;
+  margin: 0 0 6px;
+}
+
+.print-title p {
+  color: #928b7a;
+  font-weight: 700;
+  margin: 0;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.summary-box {
+  background: #11130f;
+  border: 1px solid rgba(224, 182, 79, 0.18);
+  border-radius: 22px;
+  padding: 26px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+}
+
+.summary-box h3 {
+  color: #e0b64f;
+  font-size: 30px;
+  margin: 0 0 8px;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.summary-box p {
+  color: #928b7a;
+  font-weight: 850;
+  margin: 0;
+}
+
+.payment-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.payment-card {
+  background: linear-gradient(135deg, #080907, #11130f);
+  border: 1px solid rgba(224, 182, 79, 0.18);
+  border-radius: 22px;
+  padding: 26px;
+}
+
+.payment-card h3 {
+  color: #e0b64f;
+  font-size: 30px;
+  margin: 0 0 8px;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.payment-card p {
+  color: #ded8c9;
+  font-weight: 850;
+  margin: 0;
+}
+
+.report-card {
+  background: #11130f;
+  border: 1px solid rgba(224, 182, 79, 0.18);
+  border-radius: 24px;
+  padding: 26px;
+  margin-bottom: 24px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+  overflow-x: auto;
+}
+
+.report-card h2 {
+  color: #ffffff;
+  margin: 0 0 20px;
+  font-size: 26px;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.report-table th {
+  background: #080907;
+  color: #e0b64f;
+  text-align: left;
+  padding: 15px;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.report-table td {
+  color: #ded8c9;
+  padding: 15px;
+  border-bottom: 1px solid rgba(224, 182, 79, 0.12);
+  font-weight: 650;
+}
+
+.report-table tr:hover td {
+  background: rgba(201, 149, 37, 0.08);
+}
+
+.green-price {
+  color: #22c55e !important;
+  font-weight: 950;
+}
+
+.loading-box {
+  background: rgba(201, 149, 37, 0.12);
+  color: #e0b64f;
+  border: 1px dashed rgba(224, 182, 79, 0.4);
+  padding: 30px;
+  border-radius: 18px;
+  text-align: center;
+  font-weight: 950;
+}
+
+@media (max-width: 1100px) {
+  .filter-section,
+  .summary-grid,
+  .payment-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .sales-report-page {
+    padding: 16px;
+  }
+
+  .sales-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .filter-section,
+  .summary-grid,
+  .payment-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .sales-report-page {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+
+  .report-card,
+  .summary-box,
+  .payment-card {
+    background: white !important;
+    color: black !important;
+  }
+
+  .report-table td,
+  .report-table th {
+    color: black !important;
+  }
+}

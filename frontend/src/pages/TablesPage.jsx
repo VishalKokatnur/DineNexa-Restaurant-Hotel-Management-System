@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import RestaurantLayout from "../layouts/RestaurantLayout";
 import "./DashboardPage.css";
+import "./TablesPage.css";
 
 function TablesPage() {
   const [tables, setTables] = useState([]);
-  const [search, setSearch] = useState("");
   const [editingId, setEditingId] = useState(null);
+  const [editingTableStatus, setEditingTableStatus] = useState("");
+  const [search, setSearch] = useState("");
 
   const [formData, setFormData] = useState({
     table_number: "",
@@ -19,10 +21,40 @@ function TablesPage() {
   }, []);
 
   const fetchTables = async () => {
-    const response = await axios.get(
-      "http://127.0.0.1:8000/api/restaurant/tables/"
-    );
-    setTables(response.data);
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/restaurant/tables/"
+      );
+      setTables(response.data);
+    } catch (error) {
+      console.log("Tables fetch error", error);
+      alert("Failed to load tables");
+    }
+  };
+
+  const getBackendErrorMessage = (error) => {
+    const data = error.response?.data;
+
+    if (!data) return "Something went wrong";
+    if (typeof data === "string") return data;
+
+    if (data.status) {
+      return Array.isArray(data.status) ? data.status[0] : data.status;
+    }
+
+    if (data.table_number) {
+      return Array.isArray(data.table_number)
+        ? data.table_number[0]
+        : data.table_number;
+    }
+
+    if (data.capacity) {
+      return Array.isArray(data.capacity) ? data.capacity[0] : data.capacity;
+    }
+
+    if (data.detail) return data.detail;
+
+    return JSON.stringify(data);
   };
 
   const handleChange = (e) => {
@@ -32,58 +64,129 @@ function TablesPage() {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (editingId) {
-      await axios.put(
-        `http://127.0.0.1:8000/api/restaurant/tables/${editingId}/`,
-        formData
-      );
-      alert("Table updated successfully");
-    } else {
-      await axios.post(
-        "http://127.0.0.1:8000/api/restaurant/tables/",
-        formData
-      );
-      alert("Table added successfully");
-    }
-
+  const resetForm = () => {
+    setEditingId(null);
+    setEditingTableStatus("");
     setFormData({
       table_number: "",
       capacity: "",
       status: "Available",
     });
+  };
 
-    setEditingId(null);
-    fetchTables();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.table_number.trim()) {
+      alert("Please enter table number");
+      return;
+    }
+
+    if (!formData.capacity || Number(formData.capacity) <= 0) {
+      alert("Capacity must be greater than 0");
+      return;
+    }
+
+    if (
+      editingId &&
+      editingTableStatus === "Occupied" &&
+      formData.status === "Available"
+    ) {
+      alert(
+        "This table has an active order. Complete bill, cancel order, or delete active order first."
+      );
+      return;
+    }
+
+    try {
+      if (editingId) {
+        await axios.put(
+          `http://127.0.0.1:8000/api/restaurant/tables/${editingId}/`,
+          {
+            table_number: formData.table_number,
+            capacity: Number(formData.capacity),
+            status: formData.status,
+          }
+        );
+
+        alert("Table updated successfully");
+      } else {
+        await axios.post("http://127.0.0.1:8000/api/restaurant/tables/", {
+          table_number: formData.table_number,
+          capacity: Number(formData.capacity),
+          status: formData.status,
+        });
+
+        alert("Table added successfully");
+      }
+
+      resetForm();
+      fetchTables();
+    } catch (error) {
+      console.log("Table save error", error);
+      alert(getBackendErrorMessage(error));
+    }
   };
 
   const handleEdit = (table) => {
     setEditingId(table.id);
+    setEditingTableStatus(table.status);
+
     setFormData({
       table_number: table.table_number,
       capacity: table.capacity,
       status: table.status,
     });
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this table?")) {
-      await axios.delete(`http://127.0.0.1:8000/api/restaurant/tables/${id}/`);
+  const handleDelete = async (table) => {
+    if (table.status === "Occupied") {
+      alert(
+        "This table has an active order. Complete bill, cancel order, or delete active order first."
+      );
+      return;
+    }
+
+    if (!window.confirm(`Delete Table ${table.table_number}?`)) {
+      return;
+    }
+
+    try {
+      await axios.delete(
+        `http://127.0.0.1:8000/api/restaurant/tables/${table.id}/`
+      );
+
       alert("Table deleted successfully");
       fetchTables();
+    } catch (error) {
+      console.log("Table delete error", error);
+      alert(getBackendErrorMessage(error));
     }
   };
 
-  const filteredTables = tables.filter((table) =>
-    table.table_number.toLowerCase().includes(search.toLowerCase()) ||
-    table.status.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredTables = tables.filter((table) => {
+    const keyword = search.toLowerCase();
+
+    return (
+      String(table.table_number).toLowerCase().includes(keyword) ||
+      String(table.status).toLowerCase().includes(keyword) ||
+      String(table.capacity).toLowerCase().includes(keyword)
+    );
+  });
+
+  const getStatusClass = (status) => {
+    if (status === "Available") return "table-status available-status";
+    if (status === "Occupied") return "table-status occupied-status";
+    if (status === "Reserved") return "table-status reserved-status";
+    if (status === "Cleaning") return "table-status cleaning-status";
+    return "table-status";
+  };
 
   return (
     <RestaurantLayout>
-      <div className="page-box">
+      <div className="page-box tables-page-box">
         <div className="page-header">
           <div>
             <h1>Tables Management</h1>
@@ -91,50 +194,81 @@ function TablesPage() {
           </div>
         </div>
 
-        <form className="menu-form" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="table_number"
-            placeholder="Table Number"
-            value={formData.table_number}
-            onChange={handleChange}
-            required
-          />
+        <form className="table-form" onSubmit={handleSubmit}>
+          <div className="table-field">
+            <label>Table Number</label>
+            <input
+              type="text"
+              name="table_number"
+              placeholder="Example: T1"
+              value={formData.table_number}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-          <input
-            type="number"
-            name="capacity"
-            placeholder="Capacity"
-            value={formData.capacity}
-            onChange={handleChange}
-            required
-          />
+          <div className="table-field">
+            <label>Capacity</label>
+            <input
+              type="number"
+              name="capacity"
+              placeholder="Example: 4"
+              value={formData.capacity}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-          <select name="status" value={formData.status} onChange={handleChange}>
-            <option value="Available">Available</option>
-            <option value="Reserved">Reserved</option>
-            <option value="Occupied">Occupied</option>
-            <option value="Cleaning">Cleaning</option>
-          </select>
+          <div className="table-field">
+            <label>Status</label>
+            <select
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+            >
+              <option value="Available">Available</option>
+              <option value="Reserved">Reserved</option>
+              <option value="Occupied">Occupied</option>
+              <option value="Billing">Billing</option>
+              <option value="Cleaning">Cleaning</option>
+            </select>
+          </div>
 
-          <button type="submit" className="add-btn">
-            {editingId ? "Update Table" : "+ Add Table"}
-          </button>
+          <div className="table-field button-field">
+            <button type="submit" className="table-save-btn">
+              {editingId ? "Update Table" : "+ Add Table"}
+            </button>
+          </div>
+
+          {editingId && (
+            <div className="table-field button-field">
+              <button type="button" className="table-cancel-btn" onClick={resetForm}>
+                Cancel Edit
+              </button>
+            </div>
+          )}
         </form>
 
-        <div className="toolbar">
-          <input
-            type="text"
-            placeholder="Search table number or status..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
+        {editingId && editingTableStatus === "Occupied" && (
+          <div className="table-warning-box">
+            This table is Occupied. You can update table number/capacity, but you
+            cannot make it Available until its active order is billed, cancelled,
+            or deleted.
+          </div>
+        )}
+
+        <input
+          type="text"
+          className="table-search-input"
+          placeholder="Search table number, capacity or status..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
         <table className="premium-table">
           <thead>
             <tr>
-              <th>ID</th>
+              
               <th>Table Number</th>
               <th>Capacity</th>
               <th>Status</th>
@@ -143,27 +277,43 @@ function TablesPage() {
           </thead>
 
           <tbody>
-            {filteredTables.map((table) => (
-              <tr key={table.id}>
-                <td>#{table.id}</td>
-                <td className="item-name">🪑 {table.table_number}</td>
-                <td>{table.capacity} Persons</td>
-                <td>
-                  <span className="category-badge">{table.status}</span>
-                </td>
-                <td>
-                  <button className="edit-btn" onClick={() => handleEdit(table)}>
-                    Edit
-                  </button>
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDelete(table.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
+            {filteredTables.length === 0 ? (
+              <tr>
+                <td colSpan="4">No tables found.</td>
               </tr>
-            ))}
+            ) : (
+              filteredTables.map((table) => (
+                <tr key={table.id}>
+                  <td>🪑 {table.table_number}</td>
+
+                  <td>{table.capacity} Persons</td>
+
+                  <td>
+                    <span className={getStatusClass(table.status)}>
+                      {table.status}
+                    </span>
+                  </td>
+
+                  <td>
+                    <button
+                      type="button"
+                      className="edit-btn"
+                      onClick={() => handleEdit(table)}
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      type="button"
+                      className="delete-btn"
+                      onClick={() => handleDelete(table)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

@@ -194,7 +194,7 @@ function EmployeesPage() {
         <table className="premium-table">
           <thead>
             <tr>
-              <th>ID</th>
+              
               <th>Employee</th>
               <th>Phone</th>
               <th>Email</th>
@@ -209,15 +209,20 @@ function EmployeesPage() {
           <tbody>
             {filteredEmployees.map((emp) => (
               <tr key={emp.id}>
-                <td>#{emp.id}</td>
                 <td className="item-name">👨‍🍳 {emp.name}</td>
+
                 <td>{emp.phone}</td>
+
                 <td>{emp.email || "-"}</td>
+
                 <td>
                   <span className="category-badge">{emp.role}</span>
                 </td>
+
                 <td className="price">₹{emp.salary}</td>
+
                 <td>{emp.shift_time}</td>
+
                 <td>
                   {emp.is_active ? (
                     <span className="available">Active</span>
@@ -225,10 +230,15 @@ function EmployeesPage() {
                     <span className="not-available">Inactive</span>
                   )}
                 </td>
+
                 <td>
-                  <button className="edit-btn" onClick={() => handleEdit(emp)}>
+                  <button
+                    className="edit-btn"
+                    onClick={() => handleEdit(emp)}
+                  >
                     Edit
                   </button>
+
                   <button
                     className="delete-btn"
                     onClick={() => handleDelete(emp.id)}

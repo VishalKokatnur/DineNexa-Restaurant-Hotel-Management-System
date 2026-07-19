@@ -2,271 +2,463 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import RestaurantLayout from "../layouts/RestaurantLayout";
 import "./DashboardPage.css";
+import "./BillingPage.css";
 
 function BillingPage() {
   const [tables, setTables] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [bills, setBills] = useState([]);
   const [menuItems, setMenuItems] = useState([]);
 
-  const [customerName, setCustomerName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [selectedTableId, setSelectedTableId] = useState("");
+  const [selectedOrderId, setSelectedOrderId] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
 
+  const [customerName, setCustomerName] = useState("Walk-in Customer");
+  const [phone, setPhone] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Cash");
-  const [paymentInfo, setPaymentInfo] = useState("");
   const [discount, setDiscount] = useState(0);
 
+  const [savedBill, setSavedBill] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const BILLING_ALLOWED_STATUSES = ["Served"];
+
   useEffect(() => {
-    axios.get("http://127.0.0.1:8000/api/restaurant/tables/")
-      .then((res) => setTables(res.data));
-
-    axios.get("http://127.0.0.1:8000/api/restaurant/orders/")
-      .then((res) => setOrders(res.data));
-
-    axios.get("http://127.0.0.1:8000/api/restaurant/menu-items/")
-      .then((res) => setMenuItems(res.data));
+    fetchData();
   }, []);
 
-  const handleTableChange = (e) => {
-    const tableId = Number(e.target.value);
-    setSelectedTableId(tableId);
+  const fetchData = async () => {
+    try {
+      const [tableRes, orderRes, menuRes, billRes] = await Promise.all([
+        axios.get("http://127.0.0.1:8000/api/restaurant/tables/"),
+        axios.get("http://127.0.0.1:8000/api/restaurant/orders/"),
+        axios.get("http://127.0.0.1:8000/api/restaurant/menu-items/"),
+        axios.get("http://127.0.0.1:8000/api/restaurant/bills/"),
+      ]);
 
-    const tableOrders = orders.filter((order) => order.table === tableId);
-
-    if (tableOrders.length > 0) {
-      setSelectedOrder(tableOrders[tableOrders.length - 1]);
-    } else {
-      setSelectedOrder(null);
+      setTables(tableRes.data);
+      setOrders(orderRes.data);
+      setMenuItems(menuRes.data);
+      setBills(billRes.data);
+    } catch (error) {
+      console.log("Billing fetch error", error);
+      alert("Failed to load billing data");
     }
   };
 
-  const getSelectedItems = () => {
-    if (!selectedOrder) return [];
+  const getBackendErrorMessage = (error) => {
+    const data = error.response?.data;
 
-    return selectedOrder.items
-      .map((itemId) => {
-        const item = menuItems.find((m) => m.id === itemId);
-        return item ? { ...item, qty: 1 } : null;
+    if (!data) return "Bill save failed";
+
+    if (typeof data === "string") return data;
+
+    if (data.order) {
+      if (Array.isArray(data.order)) return data.order[0];
+      return data.order;
+    }
+
+    if (data.stock) {
+      if (Array.isArray(data.stock)) return data.stock.join("\n");
+      return data.stock;
+    }
+
+    if (data.non_field_errors) {
+      if (Array.isArray(data.non_field_errors)) {
+        return data.non_field_errors[0];
+      }
+      return data.non_field_errors;
+    }
+
+    if (data.detail) return data.detail;
+
+    const messages = [];
+
+    Object.keys(data).forEach((key) => {
+      const value = data[key];
+
+      if (Array.isArray(value)) {
+        messages.push(`${key}: ${value.join(", ")}`);
+      } else {
+        messages.push(`${key}: ${value}`);
+      }
+    });
+
+    return messages.length > 0 ? messages.join("\n") : JSON.stringify(data);
+  };
+
+  const orderAlreadyBilled = (orderId) => {
+    return bills.some((bill) => Number(bill.order) === Number(orderId));
+  };
+
+  const servedUnbilledOrders = orders.filter((order) => {
+    const isServed = BILLING_ALLOWED_STATUSES.includes(order.status);
+    const isNotBilled = !orderAlreadyBilled(order.id);
+
+    return isServed && isNotBilled;
+  });
+
+  const getTableName = (tableId) => {
+    const table = tables.find((t) => Number(t.id) === Number(tableId));
+    return table ? table.table_number : tableId;
+  };
+
+  const getOrderItems = (order) => {
+    if (!order || !Array.isArray(order.items)) return [];
+
+    return order.items
+      .map((orderItem) => {
+        const itemId =
+          typeof orderItem === "object"
+            ? orderItem.id || orderItem.menu_item || orderItem.menu_item_id
+            : orderItem;
+
+        const menuItem = menuItems.find((m) => Number(m.id) === Number(itemId));
+
+        if (!menuItem) return null;
+
+        return {
+          id: menuItem.id,
+          name: menuItem.name,
+          price: Number(menuItem.price || 0),
+          quantity: 1,
+          subtotal: Number(menuItem.price || 0),
+        };
       })
       .filter(Boolean);
   };
 
-  const billItems = getSelectedItems();
+  const billItems = getOrderItems(selectedOrder);
 
-  const subtotal = billItems.reduce(
-    (total, item) => total + Number(item.price) * item.qty,
-    0
-  );
+  const subtotal = billItems.reduce((sum, item) => {
+    return sum + Number(item.subtotal || 0);
+  }, 0);
 
-  const gst = subtotal * 0.05;
-  const grandTotal = subtotal + gst - Number(discount || 0);
+  const gstAmount = subtotal * 0.05;
+  const discountAmount = Number(discount || 0);
+  const grandTotal = subtotal + gstAmount - discountAmount;
 
-  const selectedTable = tables.find(
-    (table) => table.id === Number(selectedTableId)
-  );
+  const handleOrderSelect = (e) => {
+    const orderId = e.target.value;
+
+    setSelectedOrderId(orderId);
+    setSavedBill(null);
+
+    if (!orderId) {
+      setSelectedOrder(null);
+      return;
+    }
+
+    const order = orders.find((o) => Number(o.id) === Number(orderId));
+
+    if (!order) {
+      setSelectedOrder(null);
+      return;
+    }
+
+    if (orderAlreadyBilled(order.id)) {
+      alert("This order already has a bill. Please print it from Bill History.");
+      setSelectedOrderId("");
+      setSelectedOrder(null);
+      return;
+    }
+
+    if (!BILLING_ALLOWED_STATUSES.includes(order.status)) {
+      alert("Only Served orders can be billed.");
+      setSelectedOrderId("");
+      setSelectedOrder(null);
+      return;
+    }
+
+    setSelectedOrder(order);
+  };
 
   const saveBill = async () => {
-  if (!selectedOrder) {
-    alert("Please select a table with order");
-    return;
-  }
+    if (!selectedOrder) {
+      alert("Please select a served order");
+      return;
+    }
 
-  try {
-    await axios.post("http://127.0.0.1:8000/api/restaurant/bills/", {
-      order: selectedOrder.id,
-      total_amount: subtotal.toFixed(2),
-      discount: Number(discount || 0).toFixed(2),
-      tax_amount: gst.toFixed(2),
-      final_amount: grandTotal.toFixed(2),
-      payment_method: paymentMethod,
-      payment_status: "Paid",
-    });
+    if (billItems.length === 0) {
+      alert("Selected order has no items");
+      return;
+    }
 
-    alert("Bill saved successfully");
-  } catch (error) {
-    console.log(error);
-    alert("Error saving bill");
-  }
-};
+    if (savedBill) {
+      alert("This bill is already saved. You can print it.");
+      return;
+    }
 
+    if (discountAmount < 0) {
+      alert("Discount cannot be negative");
+      return;
+    }
 
+    if (grandTotal < 0) {
+      alert("Grand total cannot be negative");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const payload = {
+        order: selectedOrder.id,
+        customer_name: customerName || "Walk-in Customer",
+        phone: phone || "-",
+        total_amount: subtotal.toFixed(2),
+        discount: discountAmount.toFixed(2),
+        tax_amount: gstAmount.toFixed(2),
+        final_amount: grandTotal.toFixed(2),
+        payment_method: paymentMethod,
+        payment_status: "Paid",
+      };
+
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/restaurant/bills/",
+        payload
+      );
+
+      alert("Bill saved successfully. Stock deducted automatically.");
+
+      setSavedBill(response.data);
+
+      await fetchData();
+    } catch (error) {
+      console.log("Bill save error", error);
+      alert(getBackendErrorMessage(error));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const printBill = () => {
+    if (!selectedOrder) {
+      alert("Please select an order first");
+      return;
+    }
+
+    window.print();
+  };
+
+  const resetBilling = () => {
+    setSelectedOrderId("");
+    setSelectedOrder(null);
+    setSavedBill(null);
+    setCustomerName("Walk-in Customer");
+    setPhone("");
+    setPaymentMethod("Cash");
+    setDiscount(0);
+    fetchData();
+  };
 
   return (
     <RestaurantLayout>
-      <div className="pos-container">
-        <div className="pos-left">
-          <h1>Billing / POS</h1>
+      <div className="page-box billing-page-box">
+        <div className="page-header">
+          <div>
+            <h1>Billing / POS</h1>
+            <p>Create bill only after order is Served.</p>
+          </div>
+        </div>
 
-          <div className="customer-section">
+        <div className="billing-form">
+          <div className="billing-field">
+            <label>Customer Name</label>
             <input
               type="text"
               placeholder="Customer Name"
               value={customerName}
               onChange={(e) => setCustomerName(e.target.value)}
             />
+          </div>
 
+          <div className="billing-field">
+            <label>Phone Number</label>
             <input
               type="text"
               placeholder="Phone Number"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
+          </div>
 
-            <select value={selectedTableId} onChange={handleTableChange}>
-              <option value="">Select Table</option>
-              {tables.map((table) => (
-                <option key={table.id} value={table.id}>
-                  Table {table.table_number}
+          <div className="billing-field">
+            <label>Served Order</label>
+            <select value={selectedOrderId} onChange={handleOrderSelect}>
+              <option value="">Select Served Order</option>
+
+              {servedUnbilledOrders.map((order) => (
+                <option key={order.id} value={order.id}>
+                  Order #{order.id} - Table {getTableName(order.table)} -{" "}
+                  {order.status}
                 </option>
               ))}
             </select>
           </div>
 
-          {!selectedOrder && selectedTableId && (
-            <p className="no-order-msg">No order found for this table.</p>
-          )}
-
-          <h2 className="section-title">Auto Loaded Order Items</h2>
-
-          <table className="premium-table">
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Qty</th>
-                <th>Price</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {billItems.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.name}</td>
-                  <td>{item.qty}</td>
-                  <td>₹{item.price}</td>
-                  <td>₹{Number(item.price) * item.qty}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <div className="payment-row">
+          <div className="billing-field">
+            <label>Payment Method</label>
             <select
               value={paymentMethod}
-              onChange={(e) => {
-                setPaymentMethod(e.target.value);
-                setPaymentInfo("");
-              }}
+              onChange={(e) => setPaymentMethod(e.target.value)}
             >
               <option value="Cash">Cash</option>
               <option value="UPI">UPI</option>
               <option value="Card">Card</option>
               <option value="Online">Online</option>
             </select>
+          </div>
 
-            {paymentMethod === "Cash" && (
-              <input
-                type="number"
-                placeholder="Cash Received"
-                value={paymentInfo}
-                onChange={(e) => setPaymentInfo(e.target.value)}
-              />
-            )}
-
-            {paymentMethod === "UPI" && (
-              <input
-                type="text"
-                placeholder="UPI Transaction ID"
-                value={paymentInfo}
-                onChange={(e) => setPaymentInfo(e.target.value)}
-              />
-            )}
-
-            {paymentMethod === "Card" && (
-              <input
-                type="text"
-                placeholder="Card Last 4 Digits"
-                value={paymentInfo}
-                onChange={(e) => setPaymentInfo(e.target.value)}
-              />
-            )}
-
-            {paymentMethod === "Online" && (
-              <input
-                type="text"
-                placeholder="Reference Number"
-                value={paymentInfo}
-                onChange={(e) => setPaymentInfo(e.target.value)}
-              />
-            )}
-
+          <div className="billing-field">
+            <label>Discount</label>
             <input
               type="number"
+              min="0"
               placeholder="Discount"
               value={discount}
               onChange={(e) => setDiscount(e.target.value)}
             />
-            <button className="add-btn" onClick={saveBill}>
-  Save Bill
-</button>
+          </div>
 
-            <button className="add-btn" onClick={() => window.print()}>
-              Print Bill
+          <div className="billing-field button-field">
+            <button
+              type="button"
+              className="refresh-billing-btn"
+              onClick={resetBilling}
+            >
+              Refresh
             </button>
           </div>
         </div>
 
-        <div className="bill-receipt">
-          <h2>SMARTDINE PRO</h2>
-          <p>Premium Restaurant Management</p>
-
-          <div className="line"></div>
-
-          <p><b>Customer:</b> {customerName || "Walk-in Customer"}</p>
-          <p><b>Phone:</b> {phone || "-"}</p>
-          <p><b>Table:</b> {selectedTable ? selectedTable.table_number : "-"}</p>
-          <p><b>Date:</b> {new Date().toLocaleString()}</p>
-
-          <div className="line"></div>
-
-          <h3>Items</h3>
-
-          {billItems.map((item) => (
-            <div className="receipt-item" key={item.id}>
-              <span>{item.name}</span>
-              <span>{item.qty}</span>
-              <span>₹{Number(item.price) * item.qty}</span>
-            </div>
-          ))}
-
-          <div className="line"></div>
-
-          <div className="receipt-total">
-            <p>Subtotal <b>₹{subtotal.toFixed(2)}</b></p>
-            <p>GST 5% <b>₹{gst.toFixed(2)}</b></p>
-            <p>Discount <b>₹{Number(discount || 0).toFixed(2)}</b></p>
-            <h3>Grand Total <b>₹{grandTotal.toFixed(2)}</b></h3>
-            <p>Payment Mode <b>{paymentMethod}</b></p>
-
-            {paymentInfo && (
-              <p>
-                {paymentMethod === "Cash"
-                  ? "Cash Received"
-                  : paymentMethod === "UPI"
-                  ? "UPI Txn ID"
-                  : paymentMethod === "Card"
-                  ? "Card Last 4"
-                  : "Reference No"}
-                <b>{paymentInfo}</b>
-              </p>
-            )}
+        {servedUnbilledOrders.length === 0 && !selectedOrder && (
+          <div className="billing-warning-box">
+            No served unbilled orders found. Order must be marked as Served
+            before billing.
           </div>
+        )}
 
-          <div className="line"></div>
+        {savedBill && (
+          <div className="billing-success-box">
+            Bill saved successfully. Stock is deducted automatically. Table is
+            now available and order is marked as billed. You can print this
+            invoice.
+          </div>
+        )}
 
-          <h4>Thank You, Visit Again!</h4>
-        </div>
+        {selectedOrder && (
+          <div className="invoice-box" id="invoice">
+            <div className="invoice-header">
+              <h1>SmartDine Pro</h1>
+              <p>Premium Restaurant Management</p>
+              <p>GSTIN: 29ABCDE1234F1Z5</p>
+              <h2>GST TAX INVOICE</h2>
+            </div>
+
+            <div className="invoice-details">
+              <div>
+                <p>
+                  <strong>{savedBill ? "Bill No" : "Order No"}:</strong> #
+                  {savedBill?.id || selectedOrder.id}
+                </p>
+
+                <p>
+                  <strong>Customer:</strong>{" "}
+                  {customerName || "Walk-in Customer"}
+                </p>
+
+                <p>
+                  <strong>Phone:</strong> {phone || "-"}
+                </p>
+              </div>
+
+              <div>
+                <p>
+                  <strong>Table:</strong> {getTableName(selectedOrder.table)}
+                </p>
+
+                <p>
+                  <strong>Date:</strong> {new Date().toLocaleDateString()}
+                </p>
+
+                <p>
+                  <strong>Time:</strong> {new Date().toLocaleTimeString()}
+                </p>
+              </div>
+            </div>
+
+            <table className="billing-invoice-table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Qty</th>
+                  <th>Price</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {billItems.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.name}</td>
+                    <td>{item.quantity}</td>
+                    <td>₹{item.price.toFixed(2)}</td>
+                    <td>₹{item.subtotal.toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <div className="bill-total-box">
+              <p>
+                Subtotal: <strong>₹{subtotal.toFixed(2)}</strong>
+              </p>
+
+              <p>
+                GST 5%: <strong>₹{gstAmount.toFixed(2)}</strong>
+              </p>
+
+              <p>
+                Discount: <strong>₹{discountAmount.toFixed(2)}</strong>
+              </p>
+
+              <h2>Grand Total: ₹{grandTotal.toFixed(2)}</h2>
+
+              <p>Payment Mode: {paymentMethod}</p>
+            </div>
+
+            <div className="invoice-footer">
+              <p>Thank You! Visit Again</p>
+              <p>This is a computer-generated invoice.</p>
+            </div>
+          </div>
+        )}
+
+        {selectedOrder && (
+          <div className="bill-actions">
+            <button
+              type="button"
+              className="save-bill-btn"
+              onClick={saveBill}
+              disabled={loading || savedBill}
+            >
+              {savedBill
+                ? "Bill Saved"
+                : loading
+                ? "Saving Bill..."
+                : "Save Bill"}
+            </button>
+
+            <button
+              type="button"
+              className="print-bill-btn"
+              onClick={printBill}
+            >
+              Print Bill
+            </button>
+          </div>
+        )}
       </div>
     </RestaurantLayout>
   );
