@@ -1,41 +1,542 @@
+/* =====================================================
+   SMARTDINE PRO - RESTAURANT LAYOUT
+   DARK / LIGHT MODE COMPATIBLE
+===================================================== */
+
+
+/* =====================================================
+   MAIN DASHBOARD CONTAINER
+===================================================== */
+
 .restaurant-dashboard {
   min-height: 100vh;
-  background: #f8f3e8;
+
+  background: var(--bg-main);
+
+  color: var(--text-main);
+
   padding: 30px 80px;
+
   font-family: "Segoe UI", sans-serif;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
 .restaurant-navbar {
-  text-align: center;
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 30px;
+
   margin-bottom: 40px;
+
+  padding: 20px 26px;
+
+  background: var(--bg-card);
+
+  border: 1px solid var(--border-color);
+
+  border-radius: 18px;
+
+  box-shadow: var(--shadow);
+
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+
+/* =====================================================
+   LOGO SECTION
+===================================================== */
+
+.restaurant-logo {
+  text-align: left;
 }
 
 .restaurant-logo h1 {
-  color: #00695c;
-  font-size: 48px;
+  margin: 0;
+
+  color: var(--primary);
+
+  font-size: 38px;
+
   font-weight: 800;
+
+  letter-spacing: -1px;
 }
 
 .restaurant-logo p {
-  color: #c79a3b;
-  margin-top: 10px;
+  margin: 7px 0 0;
+
+  color: var(--accent);
+
+  font-size: 14px;
+
+  font-weight: 600;
 }
 
-.restaurant-links {
+
+/* =====================================================
+   ROLE BADGE
+===================================================== */
+
+.role-badge {
+  display: inline-block;
+
+  margin-top: 12px;
+
+  padding: 6px 12px;
+
+  border-radius: 20px;
+
+  background: var(--bg-card-secondary);
+
+  border: 1px solid var(--border-color);
+
+  color: var(--text-muted);
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+
+/* =====================================================
+   NAVBAR RIGHT SIDE
+===================================================== */
+
+.sdp-navbar-right {
   display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+}
+
+
+/* =====================================================
+   DARK / LIGHT MODE BUTTON
+===================================================== */
+
+.theme-toggle-btn {
+  display: inline-flex;
+
+  align-items: center;
+
   justify-content: center;
-  gap: 50px;
-  margin-top: 35px;
+
+  gap: 8px;
+
+  min-width: 145px;
+
+  border: 1px solid var(--border-color);
+
+  background: var(--bg-card-secondary);
+
+  color: var(--text-main);
+
+  padding: 10px 16px;
+
+  border-radius: 10px;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-.restaurant-links a {
+.theme-toggle-btn:hover {
+  background: var(--primary);
+
+  color: white;
+
+  border-color: var(--primary);
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle-btn:active {
+  transform: translateY(0);
+}
+
+
+/* =====================================================
+   ALL APPS BUTTON
+===================================================== */
+
+.sdp-appsmenu {
+  position: relative;
+}
+
+.sdp-appsmenu-btn {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  min-width: 125px;
+
+  padding: 10px 16px;
+
+  border: 1px solid var(--border-color);
+
+  border-radius: 10px;
+
+  background: var(--bg-card-secondary);
+
+  color: var(--text-main);
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.sdp-appsmenu-btn:hover,
+.sdp-appsmenu-btn.sdp-open {
+  background: var(--primary);
+
+  color: white;
+
+  border-color: var(--primary);
+
+  transform: translateY(-1px);
+}
+
+.sdp-appsmenu-dots {
+  font-size: 22px;
+
+  line-height: 10px;
+
+  font-weight: 900;
+}
+
+.sdp-appsmenu-label {
+  white-space: nowrap;
+}
+
+
+/* =====================================================
+   ALL APPS DROPDOWN
+===================================================== */
+
+.sdp-appsmenu-dropdown {
+  position: absolute;
+
+  top: calc(100% + 12px);
+
+  right: 0;
+
+  z-index: 9999;
+
+  width: 330px;
+
+  padding: 16px;
+
+  background: var(--bg-card);
+
+  border: 1px solid var(--border-color);
+
+  border-radius: 16px;
+
+  box-shadow: var(--shadow-lg);
+
+  animation: appsMenuOpen 0.2s ease;
+}
+
+@keyframes appsMenuOpen {
+  from {
+    opacity: 0;
+
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+
+/* =====================================================
+   DROPDOWN HEADER
+===================================================== */
+
+.sdp-appsmenu-dropdown-header {
+  padding: 4px 6px 14px;
+
+  color: var(--text-muted);
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.5px;
+}
+
+
+/* =====================================================
+   APP MENU GRID
+===================================================== */
+
+.sdp-appsmenu-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 8px;
+}
+
+
+/* =====================================================
+   APP MENU ITEM
+===================================================== */
+
+.sdp-appsmenu-item {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  min-height: 48px;
+
+  padding: 10px;
+
+  border-radius: 10px;
+
   text-decoration: none;
-  color: #c79a3b;
-  font-size: 18px;
-  transition: 0.3s;
+
+  background: var(--bg-card-secondary);
+
+  color: var(--text-main);
+
+  border: 1px solid transparent;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
-.restaurant-links a:hover {
-  color: #00695c;
-  border-bottom: 2px solid #00695c;
+.sdp-appsmenu-item:hover {
+  background: var(--primary);
+
+  color: white;
+
+  border-color: var(--primary);
+
+  transform: translateY(-2px);
+}
+
+.sdp-appsmenu-item-active {
+  background: var(--primary);
+
+  color: white;
+
+  border-color: var(--primary);
+}
+
+
+/* =====================================================
+   APP MENU ICON
+===================================================== */
+
+.sdp-appsmenu-item-icon {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 30px;
+
+  height: 30px;
+
+  flex-shrink: 0;
+
+  border-radius: 8px;
+
+  background: var(--bg-main);
+
+  font-size: 17px;
+}
+
+
+/* =====================================================
+   APP MENU LABEL
+===================================================== */
+
+.sdp-appsmenu-item-label {
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+
+/* =====================================================
+   DIVIDER
+===================================================== */
+
+.sdp-appsmenu-divider {
+  height: 1px;
+
+  margin: 14px 0;
+
+  background: var(--border-color);
+}
+
+
+/* =====================================================
+   LOGOUT BUTTON
+===================================================== */
+
+.sdp-appsmenu-logout {
+  width: 100%;
+
+  padding: 11px 14px;
+
+  border: 1px solid rgba(220, 38, 38, 0.3);
+
+  border-radius: 10px;
+
+  background: rgba(220, 38, 38, 0.08);
+
+  color: #dc2626;
+
+  font-size: 14px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.sdp-appsmenu-logout:hover {
+  background: #dc2626;
+
+  color: white;
+
+  transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   RESPONSIVE DESIGN
+===================================================== */
+
+@media (max-width: 900px) {
+  .restaurant-dashboard {
+    padding: 20px;
+  }
+
+  .restaurant-navbar {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    text-align: center;
+  }
+
+  .restaurant-logo {
+    text-align: center;
+  }
+
+  .sdp-navbar-right {
+    justify-content: center;
+  }
+}
+
+
+@media (max-width: 600px) {
+  .restaurant-dashboard {
+    padding: 14px;
+  }
+
+  .restaurant-navbar {
+    padding: 18px;
+  }
+
+  .restaurant-logo h1 {
+    font-size: 30px;
+  }
+
+  .restaurant-logo p {
+    font-size: 12px;
+  }
+
+  .sdp-navbar-right {
+    flex-direction: column;
+
+    width: 100%;
+  }
+
+  .theme-toggle-btn,
+  .sdp-appsmenu,
+  .sdp-appsmenu-btn {
+    width: 100%;
+  }
+
+  .sdp-appsmenu-dropdown {
+    position: fixed;
+
+    top: 150px;
+
+    left: 14px;
+
+    right: 14px;
+
+    width: auto;
+  }
+
+  .sdp-appsmenu-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
+@media (max-width: 400px) {
+  .sdp-appsmenu-grid {
+    grid-template-columns: 1fr;
+  }
 }

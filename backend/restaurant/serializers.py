@@ -1,3 +1,4 @@
+
 from rest_framework import serializers
 from . import models
 
@@ -7,6 +8,8 @@ RestaurantTable = models.RestaurantTable
 Order = models.Order
 Bill = models.Bill
 Customer = models.Customer
+WaiterCall = models.WaiterCall
+
 
 OrderItem = (
     getattr(models, "OrderItem", None)
@@ -14,6 +17,7 @@ OrderItem = (
     or getattr(models, "RestaurantOrderItem", None)
     or getattr(models, "OrderMenuItem", None)
 )
+
 
 BillItem = (
     getattr(models, "BillItem", None)
@@ -32,6 +36,7 @@ def read_value(obj, *names):
 
             if value is not None and value != "":
                 return value
+
         except Exception:
             pass
 
@@ -61,6 +66,7 @@ def has_data(data):
             return data.exists()
 
         return len(data) > 0
+
     except Exception:
         try:
             return bool(data)
@@ -83,6 +89,7 @@ def get_related_list(obj, *related_names):
 
             if has_data(data):
                 return data
+
         except Exception:
             pass
 
@@ -109,8 +116,10 @@ def get_order_items(order):
     if OrderItem:
         try:
             items = OrderItem.objects.filter(order=order)
+
             if items.exists():
                 return items
+
         except Exception:
             pass
 
@@ -135,8 +144,10 @@ def get_bill_items(bill):
     if BillItem:
         try:
             items = BillItem.objects.filter(bill=bill)
+
             if items.exists():
                 return items
+
         except Exception:
             pass
 
@@ -149,24 +160,28 @@ def get_bill_items(bill):
 
 
 class MenuItemSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = MenuItem
         fields = "__all__"
 
 
 class RestaurantTableSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = RestaurantTable
         fields = "__all__"
 
 
 class CustomerSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Customer
         fields = "__all__"
 
 
 class OrderItemSerializer(serializers.Serializer):
+
     id = serializers.SerializerMethodField()
     item_name = serializers.SerializerMethodField()
     quantity = serializers.SerializerMethodField()
@@ -177,6 +192,7 @@ class OrderItemSerializer(serializers.Serializer):
         return read_value(obj, "id", "pk")
 
     def get_item_name(self, obj):
+
         direct_name = read_value(
             obj,
             "item_name",
@@ -189,17 +205,37 @@ class OrderItemSerializer(serializers.Serializer):
         if direct_name:
             return direct_name
 
-        related_item = read_value(obj, "menu_item", "item", "product", "menu")
+        related_item = read_value(
+            obj,
+            "menu_item",
+            "item",
+            "product",
+            "menu",
+        )
 
         if related_item:
-            related_name = read_value(related_item, "name", "title", "item_name")
+
+            related_name = read_value(
+                related_item,
+                "name",
+                "title",
+                "item_name",
+            )
+
             if related_name:
                 return related_name
 
         return "Item"
 
     def get_quantity(self, obj):
-        quantity = read_value(obj, "quantity", "qty", "count", "no_of_items")
+
+        quantity = read_value(
+            obj,
+            "quantity",
+            "qty",
+            "count",
+            "no_of_items",
+        )
 
         if quantity is not None:
             return to_int(quantity)
@@ -207,6 +243,7 @@ class OrderItemSerializer(serializers.Serializer):
         return 1
 
     def get_price(self, obj):
+
         price = read_value(
             obj,
             "price",
@@ -219,9 +256,16 @@ class OrderItemSerializer(serializers.Serializer):
         if price is not None:
             return to_float(price)
 
-        related_item = read_value(obj, "menu_item", "item", "product", "menu")
+        related_item = read_value(
+            obj,
+            "menu_item",
+            "item",
+            "product",
+            "menu",
+        )
 
         if related_item:
+
             related_price = read_value(
                 related_item,
                 "price",
@@ -236,6 +280,7 @@ class OrderItemSerializer(serializers.Serializer):
         return 0.0
 
     def get_subtotal(self, obj):
+
         subtotal = read_value(
             obj,
             "subtotal",
@@ -255,6 +300,7 @@ class OrderItemSerializer(serializers.Serializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
+
     item_details = serializers.SerializerMethodField()
     table_name = serializers.SerializerMethodField()
     customer_name_display = serializers.SerializerMethodField()
@@ -265,14 +311,26 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_item_details(self, obj):
+
         items = get_order_items(obj)
-        return OrderItemSerializer(items, many=True).data
+
+        return OrderItemSerializer(
+            items,
+            many=True
+        ).data
 
     def get_table_name(self, obj):
+
         table = read_value(obj, "table")
 
         if table:
-            table_number = read_value(table, "table_number", "number", "name")
+
+            table_number = read_value(
+                table,
+                "table_number",
+                "number",
+                "name",
+            )
 
             if table_number:
                 return f"Table {table_number}"
@@ -282,7 +340,12 @@ class OrderSerializer(serializers.ModelSerializer):
         return "-"
 
     def get_customer_name_display(self, obj):
-        customer_name = read_value(obj, "customer_name", "name")
+
+        customer_name = read_value(
+            obj,
+            "customer_name",
+            "name",
+        )
 
         if customer_name:
             return customer_name
@@ -290,7 +353,12 @@ class OrderSerializer(serializers.ModelSerializer):
         customer = read_value(obj, "customer")
 
         if customer:
-            customer_name = read_value(customer, "name", "customer_name")
+
+            customer_name = read_value(
+                customer,
+                "name",
+                "customer_name",
+            )
 
             if customer_name:
                 return customer_name
@@ -298,7 +366,13 @@ class OrderSerializer(serializers.ModelSerializer):
         return "-"
 
     def get_customer_phone_display(self, obj):
-        phone = read_value(obj, "phone", "customer_phone", "mobile")
+
+        phone = read_value(
+            obj,
+            "phone",
+            "customer_phone",
+            "mobile",
+        )
 
         if phone:
             return phone
@@ -306,7 +380,13 @@ class OrderSerializer(serializers.ModelSerializer):
         customer = read_value(obj, "customer")
 
         if customer:
-            phone = read_value(customer, "phone", "mobile", "customer_phone")
+
+            phone = read_value(
+                customer,
+                "phone",
+                "mobile",
+                "customer_phone",
+            )
 
             if phone:
                 return phone
@@ -315,6 +395,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class KitchenOrderSerializer(serializers.ModelSerializer):
+
     item_details = serializers.SerializerMethodField()
     table_name = serializers.SerializerMethodField()
     customer_name_display = serializers.SerializerMethodField()
@@ -324,14 +405,26 @@ class KitchenOrderSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_item_details(self, obj):
+
         items = get_order_items(obj)
-        return OrderItemSerializer(items, many=True).data
+
+        return OrderItemSerializer(
+            items,
+            many=True
+        ).data
 
     def get_table_name(self, obj):
+
         table = read_value(obj, "table")
 
         if table:
-            table_number = read_value(table, "table_number", "number", "name")
+
+            table_number = read_value(
+                table,
+                "table_number",
+                "number",
+                "name",
+            )
 
             if table_number:
                 return f"Table {table_number}"
@@ -341,7 +434,12 @@ class KitchenOrderSerializer(serializers.ModelSerializer):
         return "-"
 
     def get_customer_name_display(self, obj):
-        customer_name = read_value(obj, "customer_name", "name")
+
+        customer_name = read_value(
+            obj,
+            "customer_name",
+            "name",
+        )
 
         if customer_name:
             return customer_name
@@ -349,7 +447,12 @@ class KitchenOrderSerializer(serializers.ModelSerializer):
         customer = read_value(obj, "customer")
 
         if customer:
-            customer_name = read_value(customer, "name", "customer_name")
+
+            customer_name = read_value(
+                customer,
+                "name",
+                "customer_name",
+            )
 
             if customer_name:
                 return customer_name
@@ -358,12 +461,14 @@ class KitchenOrderSerializer(serializers.ModelSerializer):
 
 
 class BillSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Bill
         fields = "__all__"
 
 
 class BillHistorySerializer(serializers.ModelSerializer):
+
     bill_number = serializers.SerializerMethodField()
     customer_name = serializers.SerializerMethodField()
     phone = serializers.SerializerMethodField()
@@ -372,6 +477,7 @@ class BillHistorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Bill
+
         fields = [
             "id",
             "bill_number",
@@ -390,7 +496,12 @@ class BillHistorySerializer(serializers.ModelSerializer):
         ]
 
     def get_bill_number(self, obj):
-        bill_number = read_value(obj, "bill_number", "invoice_number")
+
+        bill_number = read_value(
+            obj,
+            "bill_number",
+            "invoice_number",
+        )
 
         if bill_number:
             return bill_number
@@ -398,7 +509,12 @@ class BillHistorySerializer(serializers.ModelSerializer):
         return obj.id
 
     def get_customer_name(self, obj):
-        customer_name = read_value(obj, "customer_name", "name")
+
+        customer_name = read_value(
+            obj,
+            "customer_name",
+            "name",
+        )
 
         if customer_name:
             return customer_name
@@ -406,7 +522,12 @@ class BillHistorySerializer(serializers.ModelSerializer):
         customer = read_value(obj, "customer")
 
         if customer:
-            customer_name = read_value(customer, "name", "customer_name")
+
+            customer_name = read_value(
+                customer,
+                "name",
+                "customer_name",
+            )
 
             if customer_name:
                 return customer_name
@@ -414,14 +535,23 @@ class BillHistorySerializer(serializers.ModelSerializer):
         order = read_value(obj, "order")
 
         if order:
-            customer_name = read_value(order, "customer_name", "name")
+
+            customer_name = read_value(
+                order,
+                "customer_name",
+                "name",
+            )
 
             if customer_name:
                 return customer_name
 
-            order_customer = read_value(order, "customer")
+            order_customer = read_value(
+                order,
+                "customer",
+            )
 
             if order_customer:
+
                 customer_name = read_value(
                     order_customer,
                     "name",
@@ -434,7 +564,13 @@ class BillHistorySerializer(serializers.ModelSerializer):
         return "-"
 
     def get_phone(self, obj):
-        phone = read_value(obj, "phone", "customer_phone", "mobile")
+
+        phone = read_value(
+            obj,
+            "phone",
+            "customer_phone",
+            "mobile",
+        )
 
         if phone:
             return phone
@@ -442,7 +578,13 @@ class BillHistorySerializer(serializers.ModelSerializer):
         customer = read_value(obj, "customer")
 
         if customer:
-            phone = read_value(customer, "phone", "mobile", "customer_phone")
+
+            phone = read_value(
+                customer,
+                "phone",
+                "mobile",
+                "customer_phone",
+            )
 
             if phone:
                 return phone
@@ -450,14 +592,24 @@ class BillHistorySerializer(serializers.ModelSerializer):
         order = read_value(obj, "order")
 
         if order:
-            phone = read_value(order, "phone", "customer_phone", "mobile")
+
+            phone = read_value(
+                order,
+                "phone",
+                "customer_phone",
+                "mobile",
+            )
 
             if phone:
                 return phone
 
-            order_customer = read_value(order, "customer")
+            order_customer = read_value(
+                order,
+                "customer",
+            )
 
             if order_customer:
+
                 phone = read_value(
                     order_customer,
                     "phone",
@@ -471,13 +623,27 @@ class BillHistorySerializer(serializers.ModelSerializer):
         return "-"
 
     def get_table_name(self, obj):
-        order = read_value(obj, "order")
+
+        order = read_value(
+            obj,
+            "order",
+        )
 
         if order:
-            table = read_value(order, "table")
+
+            table = read_value(
+                order,
+                "table",
+            )
 
             if table:
-                table_number = read_value(table, "table_number", "number", "name")
+
+                table_number = read_value(
+                    table,
+                    "table_number",
+                    "number",
+                    "name",
+                )
 
                 if table_number:
                     return f"Table {table_number}"
@@ -487,5 +653,53 @@ class BillHistorySerializer(serializers.ModelSerializer):
         return "-"
 
     def get_items(self, obj):
+
         items = get_bill_items(obj)
-        return OrderItemSerializer(items, many=True).data
+
+        return OrderItemSerializer(
+            items,
+            many=True
+        ).data
+
+
+class WaiterCallSerializer(serializers.ModelSerializer):
+
+    table_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = WaiterCall
+        fields = "__all__"
+
+    def get_table_name(self, obj):
+
+        table = read_value(
+            obj,
+            "table",
+        )
+
+        if table:
+
+            table_number = read_value(
+                table,
+                "table_number",
+                "number",
+                "name",
+            )
+
+            if table_number:
+                return f"Table {table_number}"
+
+        return "-"
+
+
+class PublicMenuItemSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MenuItem
+        fields = [
+            "id",
+            "name",
+            "category",
+            "price",
+            "available",
+        ]

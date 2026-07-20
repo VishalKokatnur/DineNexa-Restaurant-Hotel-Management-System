@@ -2398,3 +2398,256 @@ body {
   position: relative;
   z-index: 1;
 }
+
+
+
+/* =====================================================
+   SmartDine Pro - Animated Theme Switch
+===================================================== */
+
+.sdp-theme-switch {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.sdp-theme-track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 74px;
+  height: 38px;
+  border-radius: 999px;
+  padding: 0 8px;
+  background: linear-gradient(135deg, #191b16, #0c0e0b);
+  border: 1px solid rgba(224, 182, 79, 0.35);
+  transition: background 0.35s ease, border-color 0.35s ease;
+}
+
+.sdp-theme-light .sdp-theme-track {
+  background: linear-gradient(135deg, #fde68a, #f5c451);
+  border-color: rgba(168, 121, 22, 0.5);
+}
+
+.sdp-theme-icon {
+  font-size: 15px;
+  line-height: 1;
+  z-index: 1;
+  opacity: 0.55;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.sdp-theme-icon-moon {
+  margin-right: auto;
+}
+
+.sdp-theme-icon-sun {
+  margin-left: auto;
+}
+
+.sdp-theme-switch:not(.sdp-theme-light) .sdp-theme-icon-moon {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.sdp-theme-light .sdp-theme-icon-sun {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.sdp-theme-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e0b64f, #c99525);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.35s ease;
+}
+
+.sdp-theme-light .sdp-theme-knob {
+  transform: translateX(36px);
+  background: linear-gradient(135deg, #ffffff, #f1f1f1);
+}
+
+.sdp-theme-switch:hover .sdp-theme-track {
+  border-color: rgba(224, 182, 79, 0.65);
+}
+
+.sdp-theme-switch:active .sdp-theme-knob {
+  transform: scale(0.92) translateX(0);
+}
+
+.sdp-theme-light.sdp-theme-switch:active .sdp-theme-knob {
+  transform: scale(0.92) translateX(36px);
+}
+
+/* =====================================================
+   SmartDine Pro - Light Mode Override (COMPLETE)
+   Only applies when [data-theme="light"] is set on <html>
+===================================================== */
+
+[data-theme="light"] .restaurant-dashboard {
+  background: linear-gradient(rgba(245, 246, 248, 0.92), rgba(245, 246, 248, 0.97)),
+    url("https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1800&q=80");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+[data-theme="light"] .restaurant-navbar,
+[data-theme="light"] .page-box,
+[data-theme="light"] .premium-table,
+[data-theme="light"] .luxury-metric-card,
+[data-theme="light"] .dark-panel,
+[data-theme="light"] .report-card,
+[data-theme="light"] .chart-box,
+[data-theme="light"] .kitchen-summary-card,
+[data-theme="light"] .kitchen-card,
+[data-theme="light"] .restaurant-feature-card,
+[data-theme="light"] .module-summary-card,
+[data-theme="light"] .hero-side-card,
+[data-theme="light"] .royal-order-page,
+[data-theme="light"] .royal-pos-sidebar,
+[data-theme="light"] .royal-pos-main,
+[data-theme="light"] .royal-product-card,
+[data-theme="light"] .royal-panel-card,
+[data-theme="light"] .royal-queue-card,
+[data-theme="light"] .royal-selected-item,
+[data-theme="light"] .royal-preparing-card,
+[data-theme="light"] .royal-orders-table-section,
+[data-theme="light"] .quick-actions-dark,
+[data-theme="light"] .sdp-appsmenu-dropdown,
+[data-theme="light"] .sdp-appsmenu-item {
+  background: #ffffff !important;
+  border-color: #e1e7e4 !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] .restaurant-navbar::before {
+  display: none !important;
+}
+
+[data-theme="light"] .fine-dining-hero {
+  background: linear-gradient(100deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.86) 48%, rgba(255, 255, 255, 0.6) 100%),
+    url("https://images.unsplash.com/photo-1565895405227-31cffbe0cf86?auto=format&fit=crop&w=1800&q=80") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  border-color: #e1e7e4 !important;
+}
+
+[data-theme="light"] .fine-dining-hero::before {
+  border-color: rgba(168, 121, 22, 0.25) !important;
+}
+
+[data-theme="light"] .hero-search-strip {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: #e1e7e4 !important;
+}
+
+[data-theme="light"] .hero-search-strip div {
+  border-right-color: #e1e7e4 !important;
+}
+
+[data-theme="light"] .gold-pill,
+[data-theme="light"] .partner-badge {
+  background: rgba(168, 121, 22, 0.1) !important;
+  border-color: rgba(168, 121, 22, 0.35) !important;
+  color: #a87916 !important;
+}
+
+[data-theme="light"] .metric-label,
+[data-theme="light"] .luxury-metric-card::after {
+  background: #fff8df !important;
+}
+
+[data-theme="light"] .metric-label {
+  color: #a87916 !important;
+}
+
+[data-theme="light"] body,
+[data-theme="light"] .restaurant-logo h1,
+[data-theme="light"] .fine-dining-hero h1,
+[data-theme="light"] .page-header h1,
+[data-theme="light"] .luxury-metric-card h3,
+[data-theme="light"] .dark-panel h2,
+[data-theme="light"] .hero-side-card h2,
+[data-theme="light"] .kitchen-card-header h2,
+[data-theme="light"] .kitchen-summary-card h2,
+[data-theme="light"] .report-card h1,
+[data-theme="light"] .section-title h2,
+[data-theme="light"] .royal-pos-topbar h1,
+[data-theme="light"] .royal-pos-brand h2,
+[data-theme="light"] .royal-product-info h3,
+[data-theme="light"] .feature-content h3,
+[data-theme="light"] .royal-selected-item h4,
+[data-theme="light"] .sdp-appsmenu-item {
+  color: #17201d !important;
+}
+
+[data-theme="light"] .fine-dining-hero h1 span {
+  color: #a87916 !important;
+}
+
+[data-theme="light"] .fine-dining-hero p,
+[data-theme="light"] .page-header p,
+[data-theme="light"] .luxury-metric-card p,
+[data-theme="light"] .kitchen-summary-card p,
+[data-theme="light"] .kitchen-card-header p,
+[data-theme="light"] .kitchen-items p,
+[data-theme="light"] .dark-panel p,
+[data-theme="light"] .panel-row span,
+[data-theme="light"] .side-stat span,
+[data-theme="light"] .royal-pos-topbar p,
+[data-theme="light"] .royal-pos-brand p,
+[data-theme="light"] .royal-product-info p,
+[data-theme="light"] .feature-content p,
+[data-theme="light"] .section-title p,
+[data-theme="light"] .royal-orders-table td,
+[data-theme="light"] .role-badge {
+  color: #64706b !important;
+}
+
+[data-theme="light"] .hero-search-strip span {
+  color: #64706b !important;
+}
+
+[data-theme="light"] .hero-search-strip strong,
+[data-theme="light"] .side-stat strong,
+[data-theme="light"] .panel-row strong {
+  color: #a87916 !important;
+}
+
+[data-theme="light"] .side-stat {
+  border-bottom-color: rgba(168, 121, 22, 0.18) !important;
+}
+
+[data-theme="light"] .premium-table td,
+[data-theme="light"] .royal-orders-table td {
+  color: #17201d !important;
+}
+
+[data-theme="light"] .premium-table th,
+[data-theme="light"] .royal-orders-table th {
+  background: #f3f6f4 !important;
+  color: #a87916 !important;
+}
+
+[data-theme="light"] .royal-product-card,
+[data-theme="light"] .royal-panel-card,
+[data-theme="light"] .royal-pos-sidebar button,
+[data-theme="light"] .royal-category-tabs button {
+  background: #f8faf9 !important;
+  color: #17201d !important;
+}
+
+[data-theme="light"] .royal-pos-sidebar button:hover,
+[data-theme="light"] .royal-pos-sidebar button.active,
+[data-theme="light"] .royal-category-tabs button.active {
+  background: linear-gradient(135deg, #c99525, #9a6b12) !important;
+  color: #ffffff !important;
+}

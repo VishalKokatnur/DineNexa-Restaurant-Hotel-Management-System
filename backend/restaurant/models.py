@@ -160,3 +160,42 @@ class Customer(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.phone}"
+
+
+class WaiterCall(models.Model):
+    REQUEST_TYPES = [
+        ("Water", "Water"),
+        ("Tissue", "Tissue"),
+        ("Bill", "Bill"),
+        ("Waiter", "Waiter"),
+    ]
+
+    CALL_STATUS = [
+        ("Pending", "Pending"),
+        ("Resolved", "Resolved"),
+    ]
+
+    table = models.ForeignKey(
+        RestaurantTable,
+        on_delete=models.CASCADE,
+        related_name="waiter_calls",
+    )
+
+    request_type = models.CharField(
+        max_length=20,
+        default="Waiter",
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=CALL_STATUS,
+        default="Pending",
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return (
+            f"Table {self.table.table_number} - "
+            f"{self.request_type} - {self.status}"
+        )

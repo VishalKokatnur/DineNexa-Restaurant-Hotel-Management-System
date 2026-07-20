@@ -1,0 +1,529 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@600&display=swap");
+
+.cq-page {
+  min-height: 100vh;
+  background: #0d0e0b;
+  color: #ded8c9;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  padding-bottom: 110px;
+}
+
+.cq-page * {
+  box-sizing: border-box;
+}
+
+.cq-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px 18px 16px;
+  background: linear-gradient(180deg, #14150f, #0d0e0b);
+  border-bottom: 1px solid rgba(224, 182, 79, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.cq-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cq-header-mark {
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #c99525, #9a6b12);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-family: "IBM Plex Mono", monospace;
+  flex-shrink: 0;
+}
+
+.cq-header-brand h1 {
+  margin: 0;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 18px;
+  color: white;
+  font-weight: 800;
+}
+
+.cq-header-brand p {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: #e0b64f;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.cq-header-table {
+  text-align: right;
+  border: 1px solid rgba(224, 182, 79, 0.3);
+  border-radius: 14px;
+  padding: 8px 14px;
+  background: rgba(201, 149, 37, 0.08);
+}
+
+.cq-header-table span {
+  display: block;
+  font-size: 10px;
+  color: #928b7a;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+.cq-header-table strong {
+  font-family: "IBM Plex Mono", monospace;
+  color: #e0b64f;
+  font-size: 18px;
+}
+
+.cq-page-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.cq-error-card {
+  background: #14150f;
+  border: 1px solid rgba(224, 182, 79, 0.2);
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  max-width: 340px;
+}
+
+.cq-error-card h1 {
+  color: #e0b64f;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 20px;
+  margin: 0 0 10px;
+}
+
+.cq-error-card p {
+  color: #928b7a;
+  margin: 0;
+}
+
+.cq-status-strip {
+  margin: 14px 16px 0;
+  background: #14150f;
+  border: 1px solid rgba(224, 182, 79, 0.22);
+  border-radius: 18px;
+  padding: 16px;
+}
+
+.cq-status-title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.cq-status-title span {
+  color: #928b7a;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cq-status-title strong {
+  color: #e0b64f;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cq-status-track {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.cq-status-track::before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5%;
+  right: 5%;
+  height: 2px;
+  background: rgba(224, 182, 79, 0.15);
+}
+
+.cq-status-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  z-index: 2;
+  flex: 1;
+}
+
+.cq-status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #2a2c24;
+  border: 2px solid rgba(224, 182, 79, 0.2);
+}
+
+.cq-status-done .cq-status-dot {
+  background: #e0b64f;
+  border-color: #e0b64f;
+}
+
+.cq-status-label {
+  font-size: 10px;
+  color: #928b7a;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.cq-status-done .cq-status-label {
+  color: #e0b64f;
+}
+
+.cq-toast {
+  margin: 14px 16px 0;
+  background: rgba(34, 197, 94, 0.14);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  color: #4ade80;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 14px;
+  text-align: center;
+}
+
+.cq-category-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 16px;
+  padding-bottom: 6px;
+}
+
+.cq-category-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.cq-category-tabs button {
+  border: 1px solid rgba(224, 182, 79, 0.2);
+  background: #14150f;
+  color: #ded8c9;
+  padding: 9px 16px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.cq-category-tabs button.cq-tab-active {
+  background: linear-gradient(135deg, #c99525, #9a6b12);
+  color: white;
+  border-color: transparent;
+}
+
+.cq-search {
+  padding: 0 16px 14px;
+}
+
+.cq-search input {
+  width: 100%;
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(224, 182, 79, 0.2);
+  background: #14150f;
+  color: white;
+  padding: 0 16px;
+  outline: none;
+  font-size: 14px;
+}
+
+.cq-search input::placeholder {
+  color: #6b6a5e;
+}
+
+.cq-menu-list {
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cq-menu-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background: #14150f;
+  border: 1px solid rgba(224, 182, 79, 0.16);
+  border-radius: 18px;
+  padding: 16px;
+}
+
+.cq-menu-info h3 {
+  margin: 0 0 4px;
+  color: white;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.cq-menu-info p {
+  margin: 0 0 8px;
+  color: #928b7a;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+.cq-menu-info strong {
+  color: #e0b64f;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 15px;
+}
+
+.cq-add-btn {
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #c99525, #9a6b12);
+  color: white;
+  padding: 10px 18px;
+  font-weight: 800;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cq-qty-stepper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(201, 149, 37, 0.1);
+  border: 1px solid rgba(224, 182, 79, 0.3);
+  border-radius: 12px;
+  padding: 6px 10px;
+  flex-shrink: 0;
+}
+
+.cq-qty-stepper button {
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(224, 182, 79, 0.18);
+  color: #e0b64f;
+  font-weight: 900;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.cq-qty-stepper span {
+  min-width: 16px;
+  text-align: center;
+  font-weight: 800;
+  color: white;
+}
+
+.cq-empty {
+  text-align: center;
+  color: #928b7a;
+  padding: 30px 10px;
+  font-weight: 700;
+}
+
+.cq-help-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 20px 16px 4px;
+}
+
+.cq-help-row button {
+  border: 1px solid rgba(224, 182, 79, 0.2);
+  background: #14150f;
+  color: #ded8c9;
+  border-radius: 14px;
+  padding: 12px 6px;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.cq-help-row button:disabled {
+  opacity: 0.6;
+}
+
+.cq-cart-bar {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 18px;
+  height: 56px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #c99525, #9a6b12);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-weight: 800;
+  cursor: pointer;
+  z-index: 40;
+  box-shadow: 0 14px 30px rgba(201, 149, 37, 0.35);
+}
+
+.cq-cart-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 50;
+  display: flex;
+  align-items: flex-end;
+}
+
+.cq-cart-sheet {
+  width: 100%;
+  max-height: 82vh;
+  background: #14150f;
+  border-radius: 24px 24px 0 0;
+  padding: 20px;
+  overflow-y: auto;
+  border-top: 1px solid rgba(224, 182, 79, 0.25);
+}
+
+.cq-cart-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.cq-cart-head h2 {
+  margin: 0;
+  color: white;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 20px;
+}
+
+.cq-cart-head button {
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.cq-cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.cq-cart-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #0d0e0b;
+  border: 1px solid rgba(224, 182, 79, 0.14);
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+
+.cq-cart-item h4 {
+  margin: 0 0 3px;
+  color: white;
+  font-size: 14px;
+}
+
+.cq-cart-item p {
+  margin: 0;
+  color: #928b7a;
+  font-size: 12px;
+}
+
+.cq-cart-total-box {
+  background: #0d0e0b;
+  border: 1px dashed rgba(224, 182, 79, 0.2);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.cq-cart-total-box div {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: #928b7a;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.cq-cart-total-box div:last-child {
+  margin-bottom: 0;
+}
+
+.cq-cart-grand {
+  padding-top: 8px;
+  border-top: 1px dashed rgba(224, 182, 79, 0.2);
+  color: white !important;
+  font-size: 15px !important;
+}
+
+.cq-cart-total-box strong {
+  color: #e0b64f;
+}
+
+.cq-place-order-btn {
+  width: 100%;
+  height: 52px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #c99525, #9a6b12);
+  color: white;
+  font-weight: 900;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.cq-place-order-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (min-width: 640px) {
+  .cq-page {
+    max-width: 480px;
+    margin: 0 auto;
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
+  }
+
+  .cq-cart-bar {
+    max-width: 448px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+  }
+
+  .cq-cart-overlay {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cq-cart-sheet {
+    max-width: 420px;
+    border-radius: 24px;
+  }
+}

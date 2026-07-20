@@ -5,6 +5,10 @@ from rest_framework.exceptions import ValidationError
 from django.db.models import Q
 from django.db import transaction
 from django.apps import apps
+from rest_framework import permissions
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status as http_status
 
 from .models import (
     MenuItem,
@@ -12,6 +16,7 @@ from .models import (
     Order,
     Bill,
     Customer,
+    WaiterCall,
 )
 
 from .serializers import (
@@ -22,8 +27,9 @@ from .serializers import (
     BillSerializer,
     BillHistorySerializer,
     CustomerSerializer,
+    WaiterCallSerializer,
+    PublicMenuItemSerializer,
 )
-
 
 # --------------------------------------------------
 # Order Status Rules
@@ -764,3 +770,171 @@ class BillViewSet(viewsets.ModelViewSet):
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all().order_by("-id")
     serializer_class = CustomerSerializer
+
+
+# --------------------------------------------------
+# Waiter Calls (staff-facing)
+# --------------------------------------------------
+
+
+class WaiterCallViewSet(viewsets.ModelViewSet):
+    serializer_class = WaiterCallSerializer
+
+    def get_queryset(self):
+        return WaiterCall.objects.all().order_by("-created_at")
+
+
+# --------------------------------------------------
+# Public Customer QR Ordering
+# No authentication required. These endpoints power
+# the customer-facing menu opened by scanning a table QR.
+# --------------------------------------------------
+
+
+class PublicMenuListView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        items = MenuItem.objects.filter(available=True).order_by("category", "name")
+        serializer = PublicMenuItemSerializer(items, many=True)
+        return Response(serializer.data)
+
+
+class PublicTableDetailView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, table_id):
+        try:
+            table = RestaurantTable.objects.get(id=table_id)
+        except RestaurantTable.DoesNotExist:
+            return Response(
+                {"detail": "Table not found."},
+                status=http_status.HTTP_404_NOT_FOUND,
+            )
+
+        if table.status == "Cleaning":
+            return Response(
+                {"detail": "This table is being cleaned. Please ask staff for assistance."},
+                status=http_status.HTTP_400_BAD_REQUEST,
+            )
+
+        return Response(
+            {
+                "id": table.id,
+                "table_number": table.table_number,
+                "capacity": table.capacity,
+                "status": table.status,
+            }
+        )
+
+
+class PublicOrderCreateView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        table_id = request.data.get("table")
+        item_ids = request.data.get("items", [])
+
+        if not table_id:
+            return Response(
+                {"table": "Table is required."},
+                status=http_status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not item_ids or not isinstance(item_ids, list):
+            return Response(
+                {"items": "Please select at least one item."},
+                status=http_status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            table = RestaurantTable.objects.get(id=table_id)
+        except RestaurantTable.DoesNotExist:
+            return Response(
+                {"table": "Table not found."},
+                status=http_status.HTTP_404_NOT_FOUND,
+            )
+
+        if table.status == "Cleaning":
+            return Response(
+                {"table": "This table is being cleaned. Please ask staff for assistance."},
+                status=http_status.HTTP_400_BAD_REQUEST,
+            )
+
+        valid_items = list(MenuItem.objects.filter(id__in=item_ids, available=True))
+
+        if not valid_items:
+            return Response(
+                {"items": "Selected items are not available."},
+                status=http_status.HTTP_400_BAD_REQUEST,
+            )
+
+        with transaction.atomic():
+            existing_order = Order.objects.filter(
+                table=table,
+                status__in=KITCHEN_ACTIVE_STATUSES,
+            ).first()
+
+            if existing_order:
+                existing_order.items.add(*valid_items)
+                order = existing_order
+            else:
+                order = Order.objects.create(table=table, status="Pending")
+                order.items.add(*valid_items)
+
+            set_table_status(table, "Occupied")
+            sync_all_table_statuses()
+
+        serializer = OrderSerializer(order)
+        return Response(serializer.data, status=http_status.HTTP_201_CREATED)
+
+
+class PublicOrderStatusView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, table_id):
+        order = (
+            Order.objects.filter(
+                table_id=table_id,
+                status__in=["Pending", "Preparing", "Ready", "Served"],
+            )
+            .order_by("-id")
+            .first()
+        )
+
+        if not order:
+            return Response({"order": None})
+
+        serializer = OrderSerializer(order)
+        return Response({"order": serializer.data})
+
+
+class PublicWaiterCallCreateView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        table_id = request.data.get("table")
+        request_type = request.data.get("request_type", "Waiter")
+
+        if not table_id:
+            return Response(
+                {"table": "Table is required."},
+                status=http_status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            table = RestaurantTable.objects.get(id=table_id)
+        except RestaurantTable.DoesNotExist:
+            return Response(
+                {"table": "Table not found."},
+                status=http_status.HTTP_404_NOT_FOUND,
+            )
+
+        call = WaiterCall.objects.create(
+            table=table,
+            request_type=request_type,
+            status="Pending",
+        )
+
+        serializer = WaiterCallSerializer(call)
+        return Response(serializer.data, status=http_status.HTTP_201_CREATED)

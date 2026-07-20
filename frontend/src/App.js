@@ -1,7 +1,7 @@
 
-
+import CustomerMenuPage from "./pages/CustomerMenuPage";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
+import { ThemeProvider } from "./context/ThemeContext";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import MenuPage from "./pages/MenuPage";
@@ -27,7 +27,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-
+        <Route path="/order/:tableId" element={<CustomerMenuPage />} />
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
         <Route

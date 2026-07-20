@@ -1,19 +1,40 @@
+/* =====================================================
+   TABLES PAGE
+===================================================== */
+
 .tables-page-box {
   max-width: 1250px;
   margin: 0 auto;
+
+  color: var(--text-main);
 }
 
+
+/* =====================================================
+   TABLE FORM
+===================================================== */
+
 .table-form {
-  background: #fffaf0;
-  border: 1px solid #e7c98d;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 18px;
   padding: 24px;
   margin: 30px 0;
+
   display: grid;
   grid-template-columns: 1.2fr 1fr 1fr 0.8fr 0.8fr;
   gap: 16px;
   align-items: end;
+
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease;
 }
+
+
+/* =====================================================
+   FORM FIELDS
+===================================================== */
 
 .table-field {
   display: flex;
@@ -24,102 +45,647 @@
 .table-field label {
   font-size: 14px;
   font-weight: 800;
-  color: #374151;
+  color: var(--text-main);
 }
+
+
+/* =====================================================
+   INPUTS AND SELECTS
+===================================================== */
 
 .table-field input,
 .table-field select {
   width: 100%;
   height: 48px;
+
   padding: 0 14px;
-  border: 1px solid #d6b56d;
+
+  border: 1px solid var(--border-color);
   border-radius: 12px;
+
   font-size: 15px;
   outline: none;
-  background: white;
-  color: #111827;
+
+  background: var(--input-bg);
+  color: var(--text-main);
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.table-field input::placeholder {
+  color: var(--text-secondary);
 }
 
 .table-field input:focus,
 .table-field select:focus {
-  border-color: #00796b;
-  box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.12);
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 3px rgba(216, 180, 90, 0.16);
 }
+
+
+/* =====================================================
+   BUTTON FIELD
+===================================================== */
 
 .button-field {
   justify-content: flex-end;
 }
 
+
+/* =====================================================
+   ADD / UPDATE BUTTON
+===================================================== */
+
 .table-save-btn {
   height: 48px;
+
   border: none;
   border-radius: 12px;
+
   background: #00796b;
-  color: white;
+  color: #ffffff;
+
   font-weight: 900;
   cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
+
+.table-save-btn:hover {
+  background: #009688;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 18px rgba(0, 121, 107, 0.25);
+}
+
+
+/* =====================================================
+   CANCEL BUTTON
+===================================================== */
 
 .table-cancel-btn {
   height: 48px;
+
   border: none;
   border-radius: 12px;
+
   background: #b91c1c;
-  color: white;
+  color: #ffffff;
+
   font-weight: 900;
   cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
+.table-cancel-btn:hover {
+  background: #dc2626;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 18px rgba(185, 28, 28, 0.25);
+}
+
+
+/* =====================================================
+   WARNING BOX
+===================================================== */
+
 .table-warning-box {
-  background: #fffbeb;
-  color: #92400e;
+  background: var(--bg-secondary);
+  color: #b45309;
+
   border: 1px solid #facc15;
+
   padding: 14px 18px;
+
   border-radius: 12px;
   margin-bottom: 20px;
+
   font-weight: 800;
 }
+
+
+/* =====================================================
+   SEARCH INPUT
+===================================================== */
 
 .table-search-input {
   width: 100%;
   height: 48px;
-  border: 1px solid #d6b56d;
+
+  border: 1px solid var(--border-color);
   border-radius: 12px;
+
   padding: 0 16px;
   margin-bottom: 22px;
+
   font-size: 15px;
   outline: none;
+
+  background: var(--input-bg);
+  color: var(--text-main);
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
+.table-search-input::placeholder {
+  color: var(--text-secondary);
+}
+
+.table-search-input:focus {
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 3px rgba(216, 180, 90, 0.16);
+}
+
+
+/* =====================================================
+   TABLE STATUS
+===================================================== */
+
 .table-status {
+  display: inline-block;
+
   padding: 8px 14px;
+
   border-radius: 20px;
+
   font-weight: 900;
   font-size: 13px;
 }
+
+
+/* AVAILABLE */
 
 .available-status {
   background: #dcfce7;
   color: #15803d;
 }
 
+
+/* OCCUPIED */
+
 .occupied-status {
   background: #fef3c7;
   color: #b45309;
 }
+
+
+/* RESERVED */
 
 .reserved-status {
   background: #dbeafe;
   color: #1d4ed8;
 }
 
+
+/* CLEANING */
+
 .cleaning-status {
   background: #ede9fe;
   color: #6d28d9;
 }
 
+
+/* =====================================================
+   QR CODE COLUMN
+===================================================== */
+
+.premium-table th:nth-child(4) {
+  text-align: center;
+  min-width: 150px;
+}
+
+.premium-table td.qr-code-cell {
+  text-align: center;
+  vertical-align: middle;
+
+  background: rgba(216, 180, 90, 0.025);
+
+  transition:
+    background 0.25s ease;
+}
+
+.premium-table tbody tr:hover td.qr-code-cell {
+  background: rgba(216, 180, 90, 0.08);
+}
+
+
+/* =====================================================
+   VIEW QR BUTTON
+===================================================== */
+
+.tq-view-btn {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  min-width: 115px;
+
+  padding: 9px 15px;
+
+  border: 1px solid rgba(210, 170, 70, 0.45);
+  border-radius: 8px;
+
+  background: linear-gradient(
+    135deg,
+    #292719,
+    #171812
+  );
+
+  color: #f1c75b;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+
+/* QR ICON */
+
+.qr-icon {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 22px;
+  height: 22px;
+
+  border-radius: 5px;
+
+  background: #f1c75b;
+  color: #171812;
+
+  font-size: 16px;
+  font-weight: 900;
+
+  line-height: 1;
+}
+
+
+/* QR BUTTON HOVER */
+
+.tq-view-btn:hover {
+  background: linear-gradient(
+    135deg,
+    #f1c75b,
+    #c69a32
+  );
+
+  color: #161710;
+
+  border-color: #f1c75b;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 6px 18px rgba(241, 199, 91, 0.25);
+}
+
+
+/* QR ICON HOVER */
+
+.tq-view-btn:hover .qr-icon {
+  background: #161710;
+  color: #f1c75b;
+}
+
+
+/* QR BUTTON CLICK */
+
+.tq-view-btn:active {
+  transform: translateY(0);
+}
+
+
+/* QR BUTTON FOCUS */
+
+.tq-view-btn:focus-visible {
+  outline: 2px solid #f1c75b;
+  outline-offset: 3px;
+}
+
+
+/* =====================================================
+   QR MODAL OVERLAY
+===================================================== */
+
+.tq-overlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.65);
+
+  z-index: 999;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+}
+
+
+/* =====================================================
+   QR MODAL
+===================================================== */
+
+.tq-modal {
+  background: var(--bg-card);
+
+  border: 1px solid rgba(224, 182, 79, 0.25);
+
+  border-radius: 22px;
+
+  padding: 26px;
+
+  width: 100%;
+  max-width: 420px;
+
+  text-align: center;
+
+  box-shadow:
+    0 28px 70px rgba(0, 0, 0, 0.5);
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+
+
+/* =====================================================
+   QR MODAL HEADER
+===================================================== */
+
+.tq-modal-head {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 18px;
+
+  text-align: left;
+}
+
+.tq-modal-head h2 {
+  margin: 0;
+
+  color: var(--text-main);
+
+  font-size: 19px;
+
+  font-family:
+    "Cinzel",
+    Georgia,
+    serif;
+}
+
+
+/* =====================================================
+   CLOSE BUTTON
+===================================================== */
+
+.tq-close-btn {
+  border: none;
+
+  background: var(--bg-secondary);
+  color: var(--text-main);
+
+  width: 32px;
+  height: 32px;
+
+  border-radius: 50%;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.tq-close-btn:hover {
+  background: #b91c1c;
+  color: #ffffff;
+
+  transform: rotate(90deg);
+}
+
+
+/* =====================================================
+   QR DISPLAY BOX
+===================================================== */
+
+.tq-qr-box {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: #ffffff;
+
+  border-radius: 16px;
+
+  padding: 18px;
+
+  margin: 0 auto 16px;
+
+  width: fit-content;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.tq-qr-box:hover {
+  transform: scale(1.02);
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+
+/* LARGE QR */
+
+.tq-qr-box-large canvas {
+  width: 280px !important;
+  height: 280px !important;
+}
+
+
+/* =====================================================
+   QR CAPTION
+===================================================== */
+
+.tq-qr-caption {
+  color: var(--text-secondary);
+
+  font-size: 13px;
+
+  margin: 0 0 8px;
+}
+
+
+/* =====================================================
+   QR LINK
+===================================================== */
+
+.tq-qr-link {
+  color: var(--primary);
+
+  font-size: 12px;
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  word-break: break-all;
+
+  margin: 0 0 20px;
+}
+
+
+/* =====================================================
+   QR ACTION BUTTONS
+===================================================== */
+
+.tq-modal-actions {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 10px;
+}
+
+
+/* SECONDARY BUTTON */
+
+.tq-secondary-btn {
+  border: 1px solid rgba(224, 182, 79, 0.3);
+
+  background: rgba(201, 149, 37, 0.1);
+
+  color: var(--primary);
+
+  border-radius: 12px;
+
+  padding: 11px 8px;
+
+  font-weight: 800;
+
+  font-size: 12.5px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.tq-secondary-btn:hover {
+  background: rgba(201, 149, 37, 0.2);
+
+  transform: translateY(-2px);
+}
+
+
+/* PRIMARY BUTTON */
+
+.tq-primary-btn {
+  border: none;
+
+  background:
+    linear-gradient(
+      135deg,
+      #c99525,
+      #9a6b12
+    );
+
+  color: #ffffff;
+
+  border-radius: 12px;
+
+  padding: 11px 8px;
+
+  font-weight: 800;
+
+  font-size: 12.5px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.tq-primary-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 18px rgba(201, 149, 37, 0.3);
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
 @media (max-width: 1000px) {
   .table-form {
     grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .tq-modal-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .tq-modal {
+    padding: 20px;
+  }
+
+  .tq-qr-box-large canvas {
+    width: 240px !important;
+    height: 240px !important;
   }
 }
